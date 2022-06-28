@@ -3,7 +3,7 @@ vcxproj-generator-gui
 <p align="center">
     <a href="https://github.com/imahjoub/vcxproj-generator-gui/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="MIT License"></a>
-    <a href="https://github.com/imahjoub/hash_sha256" alt="Activity">
+    <a href="https://github.com/imahjoub/vcxproj-generator-gui" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/y/imahjoub/vcxproj-generator-gui" /></a>
 </p>
 
