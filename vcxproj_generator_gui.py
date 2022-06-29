@@ -5,6 +5,23 @@ Version 1.0. (See accompanying file LICENSE
 or copy at https://opensource.org/licenses/MIT)
 '''
 
+# import modules from project
+import vcxproj_generator
+
+# import modules/packages
+import os, uuid
+import tkinter as tk
+import os, sys
+import subprocess
+import re
+import threading
+
+from select import select
+from tkinter import ttk
+from tkinter import *
+from tkinter.ttk import *
+from idlelib.tooltip import Hovertip
+
 # Script settings
 
 PATHS_TO_SEARCH = ['.']
@@ -13,9 +30,6 @@ PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
 
 # Script starts here
-import os, uuid
-import vcxproj_generator
-
 def main(paths, name, platforms, configurations):
     if name == '':
         name = os.path.split(os.getcwd())[-1]
