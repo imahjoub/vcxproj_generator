@@ -287,13 +287,3 @@ class Generator:
         f = open(self.Name + '.vcxproj.filters', 'w')
         f.write(self.CreateFilters())
         f.close()
-
-def main(paths, name, platforms, configurations):
-    if name == '':
-        name = os.path.split(os.getcwd())[-1]
-    generator = Generator(name, platforms, configurations)
-    for path in paths:
-        generator.Walk(path)
-    generator.Generate()
-
-main(PATHS_TO_SEARCH, PROJECT_NAME, PLATFORMS, CONFIGURATIONS)
