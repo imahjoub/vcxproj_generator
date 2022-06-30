@@ -5,21 +5,19 @@ Version 1.0. (See accompanying file LICENSE
 or copy at https://opensource.org/licenses/MIT)
 '''
 
-# Script settings
-
-PATHS_TO_SEARCH = ['.']
-PROJECT_NAME    = '' # by default will use current directory name
-PLATFORMS       = ['Win32']
-CONFIGURATIONS  = ['Debug', 'Release']
-
+#-----------------------------------------------------------------------------------
+# Global variables
+#-----------------------------------------------------------------------------------
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
 
 
-# Script starts here
 import os, uuid
 
+#-----------------------------------------------------------------------------------
+# Global functions
+#-----------------------------------------------------------------------------------
 def Toolset():
     versions = {
         '2013': '12',
@@ -41,6 +39,9 @@ def FilterFromPath(path):
         return ''
     return head
 
+#-----------------------------------------------------------------------------------
+# --- Vcxproj class
+#-----------------------------------------------------------------------------------
 class Vcxproj:
     Header = '<?xml version="1.0" encoding="utf-8"?>'
     Project0 = '<Project DefaultTargets="Build" ToolsVersion="{}.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'.format(Toolset())
@@ -132,6 +133,9 @@ class Vcxproj:
     def Sources(name):
         return Vcxproj.SourcesT.format(name)
 
+#-----------------------------------------------------------------------------------
+# --- Filters class
+#-----------------------------------------------------------------------------------
 class Filters:
     Header = '<?xml version="1.0" encoding="utf-8"?>'
     Project0 = '<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'
@@ -167,6 +171,9 @@ class Filters:
         uid = UUID(folder)
         return Filters.FoldersT.format(folder, uid)
 
+#-----------------------------------------------------------------------------------
+# --- Generator class
+#-----------------------------------------------------------------------------------
 class Generator:
     Folders = set()
     Includes = set()

@@ -10,22 +10,17 @@ import vcxproj_generator
 
 # import modules/packages
 import os, uuid
+import tkinter
 import tkinter as tk
 import os, sys
 import subprocess
 import re
 import threading
-import tkinter
 
 from select import select
 from tkinter import ttk
-from tkinter import *
 from tkinter.ttk import *
 from idlelib.tooltip import Hovertip
-
-from tkinter import StringVar
-from tkinter import *
-from tkinter.ttk import *
 from PIL import ImageTk
 from dataclasses import dataclass
 
@@ -43,7 +38,10 @@ root = tkinter.Tk()
 root.geometry("1000x600")
 root.configure(bg="#5c8a8a")
 
-# Script starts here
+#-----------------------------------------------------------------------------------
+# --- main function
+# this must be run fron GUI class
+#-----------------------------------------------------------------------------------
 def main(paths, name, platforms, configurations):
     if name == '':
         name = os.path.split(os.getcwd())[-1]
