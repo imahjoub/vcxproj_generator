@@ -6,7 +6,7 @@ or copy at https://opensource.org/licenses/MIT)
 '''
 
 # import modules from project
-import vcxproj_generator
+from vcxproj_generator import *
 
 # import modules/packages
 import os, uuid
@@ -28,6 +28,7 @@ from dataclasses import dataclass
 # Script settings
 
 PATHS_TO_SEARCH = ['.']
+WorkingDir      = os.path.split(os.getcwd())[-1]
 PROJECT_NAME    = '' # by default will use current directory name
 PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
@@ -36,7 +37,18 @@ CONFIGURATIONS  = ['Debug', 'Release']
 # --- Create the parent window (root)
 root = tkinter.Tk()
 root.geometry("1000x600")
-root.configure(bg="#DEE4E7")
+root.configure(bg="#5c8a8a") # Light DEE4E7
+
+# --- Deactivate the resize button (GUI window size)
+root.resizable(0,0)
+
+# --- Create Tkinter Notebook for controlling sxpf-tools tabs
+control_tab = ttk.Notebook(root)
+control_tab.pack(expand=1, fill="both")
+
+#gui_msvc_setup_tab = ttk.Frame(control_tab)
+
+#control_tab.add(gui_msvc_setup_tab, text='GUI-MSVC-Setup')
 
 #-----------------------------------------------------------------------------------
 # --- main function
@@ -52,6 +64,10 @@ root.configure(bg="#DEE4E7")
 
 #main(PATHS_TO_SEARCH, PROJECT_NAME, PLATFORMS, CONFIGURATIONS)
 
+#-----------------------------------------------------------------------------------
+# --- frame 1: MSVC Setup
+#-----------------------------------------------------------------------------------
+GUI(control_tab, WorkingDir)
 
 #-----------------------------------------------------------------------------------
 # --- Mainloop: loop forever until the user exits the window

@@ -15,6 +15,17 @@ VS_VERSION = '2015' # 2013 or 2015
 
 import os, uuid
 
+import tkinter as tk
+import os, sys
+import subprocess
+import re
+import threading
+
+from select import select
+from tkinter import ttk
+from tkinter import *
+from tkinter.ttk import *
+from idlelib.tooltip import Hovertip
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -294,3 +305,33 @@ class Generator:
         f = open(self.Name + '.vcxproj.filters', 'w')
         f.write(self.CreateFilters())
         f.close()
+
+#-----------------------------------------------------------------------------------
+# --- GUI class
+#-----------------------------------------------------------------------------------
+class GUI:
+  def __init__(self, tab_name, working_dir):
+    self.print_msvc_config_frame(tab_name, working_dir)
+    self.print_cmd_line_frame(tab_name)
+
+
+  def print_msvc_config_frame(self, tab_name, working_dir):
+    # Create frame for MSVC Setup widgets
+    release_path_frame = tk.LabelFrame(tab_name, text=' MSVC Setup ',relief=GROOVE, bd='3')
+    release_path_frame.configure(font="times 11 bold")
+    release_path_frame.place(x=20, y=20, height=200, width=950)
+
+
+  def print_cmd_line_frame(self, tab_name):
+    # Create a frame for cmd line
+    # Create cmd line output window
+    cmd_line_window = tk.LabelFrame(tab_name, text=" Command Line ", relief=GROOVE, bd='3')
+    cmd_line_window.configure(font="times 11 bold")
+    cmd_line_window.place(x=20, y=240, height=300, width=950)
+
+    # Create a scrollbar text frame for the programm output
+    scrollbar_v = tk.Scrollbar(cmd_line_window, orient= VERTICAL)
+    scrollbar_v.pack(side= RIGHT,fill="y")
+
+    scrollbar_h = tk.Scrollbar(cmd_line_window, orient= HORIZONTAL)
+    scrollbar_h.pack(side= BOTTOM, fill= "x")
