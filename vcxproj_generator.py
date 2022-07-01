@@ -319,15 +319,25 @@ class GUI:
     # Create frame for MSVC Setup widgets
     release_path_frame = tk.LabelFrame(tab_name, text=' MSVC Setup ',relief=GROOVE, bd='3')
     release_path_frame.configure(font="times 11 bold")
-    release_path_frame.place(x=20, y=20, height=200, width=950)
+    release_path_frame.place(x=20, y=20, height=220, width=950)
 
+    print(working_dir)
+    # Create the browse folder bar
+    search_ini_bar = Entry(release_path_frame, textvariable=working_dir)
+    search_ini_bar.place(x=20, y=20, height=35, width=750)
+    search_ini_bar.configure(font="Arial 11")
+
+    # Create the browse folder button
+    find_ini_button = ttk.Button(release_path_frame, text="Load ini file",
+       command = lambda: 0, width=20)
+    find_ini_button.place(x=790, y=20, height=35)
 
   def print_cmd_line_frame(self, tab_name):
     # Create a frame for cmd line
     # Create cmd line output window
     cmd_line_window = tk.LabelFrame(tab_name, text=" Command Line ", relief=GROOVE, bd='3')
     cmd_line_window.configure(font="times 11 bold")
-    cmd_line_window.place(x=20, y=240, height=300, width=950)
+    cmd_line_window.place(x=20, y=250, height=340, width=950)
 
     # Create a scrollbar text frame for the programm output
     scrollbar_v = tk.Scrollbar(cmd_line_window, orient= VERTICAL)
