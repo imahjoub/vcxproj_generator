@@ -310,14 +310,14 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, tab_name, WorkingDir):
-    self.print_msvc_config_frame(tab_name, WorkingDir)
-    self.print_cmd_line_frame(tab_name)
+  def __init__(self, TabName, WorkingDir):
+    self.print_msvc_config_frame(TabName, WorkingDir)
+    self.print_cmd_line_frame(TabName)
 
 
-  def print_msvc_config_frame(self, tab_name, WorkingDir):
+  def print_msvc_config_frame(self, TabName, WorkingDir):
     # Create frame for MSVC Setup widgets
-    release_path_frame = tk.LabelFrame(tab_name, text=' MSVC Setup ',relief=GROOVE, bd='3')
+    release_path_frame = tk.LabelFrame(TabName, text=' MSVC Setup ',relief=GROOVE, bd='3')
     release_path_frame.configure(font="times 11 bold")
     release_path_frame.place(x=20, y=20, height=220, width=950)
 
@@ -332,10 +332,10 @@ class GUI:
        command = lambda: 0, width=20)
     find_ini_button.place(x=790, y=20, height=35)
 
-  def print_cmd_line_frame(self, tab_name):
+  def print_cmd_line_frame(self, TabName):
     # Create a frame for cmd line
     # Create cmd line output window
-    cmd_line_window = tk.LabelFrame(tab_name, text=" Command Line ", relief=GROOVE, bd='3')
+    cmd_line_window = tk.LabelFrame(TabName, text=" Command Line ", relief=GROOVE, bd='3')
     cmd_line_window.configure(font="times 11 bold")
     cmd_line_window.place(x=20, y=250, height=340, width=950)
 
