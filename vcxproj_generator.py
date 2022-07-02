@@ -310,25 +310,25 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, tab_name, working_dir):
-    self.print_msvc_config_frame(tab_name, working_dir)
+  def __init__(self, tab_name, WorkingDir):
+    self.print_msvc_config_frame(tab_name, WorkingDir)
     self.print_cmd_line_frame(tab_name)
 
 
-  def print_msvc_config_frame(self, tab_name, working_dir):
+  def print_msvc_config_frame(self, tab_name, WorkingDir):
     # Create frame for MSVC Setup widgets
     release_path_frame = tk.LabelFrame(tab_name, text=' MSVC Setup ',relief=GROOVE, bd='3')
     release_path_frame.configure(font="times 11 bold")
     release_path_frame.place(x=20, y=20, height=220, width=950)
 
-    print(working_dir)
+    print(WorkingDir)
     # Create the browse folder bar
-    search_ini_bar = Entry(release_path_frame, textvariable=working_dir)
+    search_ini_bar = Entry(release_path_frame, textvariable=WorkingDir)
     search_ini_bar.place(x=20, y=20, height=35, width=750)
     search_ini_bar.configure(font="Arial 11")
 
     # Create the browse folder button
-    find_ini_button = ttk.Button(release_path_frame, text="Load ini file",
+    find_ini_button = ttk.Button(release_path_frame, text="Select folder",
        command = lambda: 0, width=20)
     find_ini_button.place(x=790, y=20, height=35)
 
