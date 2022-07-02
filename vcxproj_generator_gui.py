@@ -5,9 +5,6 @@ Version 1.0. (See accompanying file LICENSE
 or copy at https://opensource.org/licenses/MIT)
 '''
 
-# import modules from project
-from vcxproj_generator import *
-
 # import modules/packages
 import os, uuid
 import tkinter
@@ -24,20 +21,28 @@ from idlelib.tooltip import Hovertip
 from PIL import ImageTk
 from dataclasses import dataclass
 
-# ---- Global variable for User setup
-PATHS_TO_SEARCH = ['.']
-PROJECT_NAME    = '' # by default will use current directory name
-PLATFORMS       = ['Win32', 'x64']
-CONFIGURATIONS  = ['Debug', 'Release']
-
+# import project files
+from vcxproj_generator import *
 
 # --- Create the parent window (root)
 root = tkinter.Tk()
 root.geometry("1000x600")
 root.configure(bg="#5c8a8a") # Light DEE4E7
 
+# --- Window title
+root.title("Vcxproj-Generator version 1.0.1")
+
 # --- Deactivate the resize button (GUI window size)
 root.resizable(0,0)
+
+# --- GUI logo
+# TBD add a logo
+#LogoDir = current_dir + "\\xyz\\xyz.png"
+#Logo    = ImageTk.PhotoImage(file=LogoDir)
+
+#IconDir = current_dir + "\\xyz\\xyz.ico"
+#root.iconbitmap(IconDir)
+
 
 # --- Create a tab control
 TabControl = ttk.Notebook(root)
@@ -46,6 +51,12 @@ TabControl.pack(expand=1, fill="both")
 # ---- Global variable for User setup
 WorkingDir      = StringVar()
 WorkingDir.set(os.getcwd())
+# +++++++++++
+PATHS_TO_SEARCH = ['.']
+PROJECT_NAME    = '' # by default will use current directory name
+PLATFORMS       = ['Win32', 'x64']
+CONFIGURATIONS  = ['Debug', 'Release']
+
 
 
 #-----------------------------------------------------------------------------------
