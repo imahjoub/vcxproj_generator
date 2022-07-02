@@ -25,10 +25,9 @@ from PIL import ImageTk
 from dataclasses import dataclass
 
 
-# Script settings
 
+# ---- Global variable for User setup
 PATHS_TO_SEARCH = ['.']
-WorkingDir      = os.path.split(os.getcwd())[-1]
 PROJECT_NAME    = '' # by default will use current directory name
 PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
@@ -46,9 +45,10 @@ root.resizable(0,0)
 control_tab = ttk.Notebook(root)
 control_tab.pack(expand=1, fill="both")
 
-#gui_msvc_setup_tab = ttk.Frame(control_tab)
+# ---- Global variable for User setup
+WorkingDir      = StringVar()
+WorkingDir.set(os.getcwd())
 
-#control_tab.add(gui_msvc_setup_tab, text='GUI-MSVC-Setup')
 
 #-----------------------------------------------------------------------------------
 # --- main function
