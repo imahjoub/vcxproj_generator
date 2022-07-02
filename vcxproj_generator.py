@@ -310,38 +310,36 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, TabName, WorkingDir):
-    self.print_msvc_config_frame(TabName, WorkingDir)
-    self.print_cmd_line_frame(TabName)
+  def __init__(self, TabControl, WorkingDir):
+    self.PrintMsvcConfigFrame(TabControl, WorkingDir)
+    self.PrintCmdLineFrame(TabControl)
 
 
-  def print_msvc_config_frame(self, TabName, WorkingDir):
-    # Create frame for MSVC Setup widgets
-    release_path_frame = tk.LabelFrame(TabName, text=' MSVC Setup ',relief=GROOVE, bd='3')
-    release_path_frame.configure(font="times 11 bold")
-    release_path_frame.place(x=20, y=20, height=220, width=950)
+  def PrintMsvcConfigFrame(self, TabControl, WorkingDir):
+    # Create frame for MSVC config widgets
+    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' MSVC Setup ',relief=GROOVE, bd='3')
+    MsvcConfigFrame.configure(font="times 11 bold")
+    MsvcConfigFrame.place(x=20, y=20, height=220, width=950)
 
-    print(WorkingDir)
-    # Create the browse folder bar
-    search_ini_bar = Entry(release_path_frame, textvariable=WorkingDir)
-    search_ini_bar.place(x=20, y=20, height=35, width=750)
-    search_ini_bar.configure(font="Arial 11")
+    # Create the working dir entry box
+    WdEntryBox = Entry(MsvcConfigFrame, textvariable=WorkingDir)
+    WdEntryBox.place(x=20, y=20, height=35, width=750)
+    WdEntryBox.configure(font="Arial 11")
 
-    # Create the browse folder button
-    find_ini_button = ttk.Button(release_path_frame, text="Select folder",
-       command = lambda: 0, width=20)
-    find_ini_button.place(x=790, y=20, height=35)
+    # Create the working dir browsing button
+    WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
+      command = lambda: 0, width=20)
+    WdBrowsingBtN.place(x=790, y=20, height=35)
 
-  def print_cmd_line_frame(self, TabName):
-    # Create a frame for cmd line
+  def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
-    cmd_line_window = tk.LabelFrame(TabName, text=" Command Line ", relief=GROOVE, bd='3')
-    cmd_line_window.configure(font="times 11 bold")
-    cmd_line_window.place(x=20, y=250, height=340, width=950)
+    CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ", relief=GROOVE, bd='3')
+    CmdLineWindow.configure(font="times 11 bold")
+    CmdLineWindow.place(x=20, y=250, height=340, width=950)
 
-    # Create a scrollbar text frame for the programm output
-    scrollbar_v = tk.Scrollbar(cmd_line_window, orient= VERTICAL)
-    scrollbar_v.pack(side= RIGHT,fill="y")
+    # Create a scrollbar text frame for programm results
+    ScrollBar_V = tk.Scrollbar(CmdLineWindow, orient= VERTICAL)
+    ScrollBar_V.pack(side= RIGHT,fill="y")
 
-    scrollbar_h = tk.Scrollbar(cmd_line_window, orient= HORIZONTAL)
-    scrollbar_h.pack(side= BOTTOM, fill= "x")
+    ScrollBar_H = tk.Scrollbar(CmdLineWindow, orient= HORIZONTAL)
+    ScrollBar_H.pack(side= BOTTOM, fill= "x")

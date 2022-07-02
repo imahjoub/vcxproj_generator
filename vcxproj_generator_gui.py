@@ -24,8 +24,6 @@ from idlelib.tooltip import Hovertip
 from PIL import ImageTk
 from dataclasses import dataclass
 
-
-
 # ---- Global variable for User setup
 PATHS_TO_SEARCH = ['.']
 PROJECT_NAME    = '' # by default will use current directory name
@@ -41,9 +39,9 @@ root.configure(bg="#5c8a8a") # Light DEE4E7
 # --- Deactivate the resize button (GUI window size)
 root.resizable(0,0)
 
-# --- Create Tkinter Notebook for controlling sxpf-tools tabs
-control_tab = ttk.Notebook(root)
-control_tab.pack(expand=1, fill="both")
+# --- Create a tab control
+TabControl = ttk.Notebook(root)
+TabControl.pack(expand=1, fill="both")
 
 # ---- Global variable for User setup
 WorkingDir      = StringVar()
@@ -67,7 +65,7 @@ WorkingDir.set(os.getcwd())
 #-----------------------------------------------------------------------------------
 # --- frame 1: MSVC Setup
 #-----------------------------------------------------------------------------------
-GUI(control_tab, WorkingDir)
+GUI(TabControl, WorkingDir)
 
 #-----------------------------------------------------------------------------------
 # --- Mainloop: loop forever until the user exits the window
