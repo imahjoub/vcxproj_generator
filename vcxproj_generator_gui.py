@@ -5,22 +5,6 @@ Version 1.0. (See accompanying file LICENSE
 or copy at https://opensource.org/licenses/MIT)
 '''
 
-# import modules/packages
-import os, uuid
-import tkinter
-import tkinter as tk
-import os, sys
-import subprocess
-import re
-import threading
-
-from select import select
-from tkinter import ttk
-from tkinter.ttk import *
-from idlelib.tooltip import Hovertip
-from PIL import ImageTk
-from dataclasses import dataclass
-
 # import project files
 from vcxproj_generator import *
 

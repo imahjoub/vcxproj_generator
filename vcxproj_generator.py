@@ -11,21 +11,26 @@ or copy at https://opensource.org/licenses/MIT)
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
+UserDir    = ""
+WorkDirIsOk = False
 
+import uuid
 
-import os, uuid
-
-import tkinter as tk
 import os, sys
 import subprocess
 import re
 import threading
+import tkinter
+import tkinter as tk
 
+from dataclasses import dataclass
+from idlelib.tooltip import Hovertip
+from PIL import ImageTk
 from select import select
 from tkinter import ttk
 from tkinter import *
+from tkinter import filedialog
 from tkinter.ttk import *
-from idlelib.tooltip import Hovertip
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -314,6 +319,24 @@ class GUI:
     self.PrintMsvcConfigFrame(TabControl, WorkingDir)
     self.PrintCmdLineFrame(TabControl)
 
+  def GetAndCheckUserDir(WorkingDir, variant):
+    # the default path, is set to exe/script curdir
+    if variant == 0:
+      FolderSelected = filedialog.askdirectory()
+      WorkingDir.set(FolderSelected)
+      UserDir = WorkingDir.get()
+    # path selected from user
+    if variant == 1:
+      UserDir = WorkingDir.get()
+
+    WorkDirIsOk = (        os.path.exists(UserDir)
+                   and not os.listdir(UserDir)
+                   and not FolderSelected)
+
+    if WorkDirIsOk == False:
+      # show error message box
+      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected path is either empty or invalid!")
+
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir):
     # Create frame for MSVC config widgets
@@ -328,7 +351,7 @@ class GUI:
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-      command = lambda: 0, width=20)
+      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, 0), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
 
   def PrintCmdLineFrame(self, TabControl):
@@ -343,3 +366,15 @@ class GUI:
 
     ScrollBar_H = tk.Scrollbar(CmdLineWindow, orient= HORIZONTAL)
     ScrollBar_H.pack(side= BOTTOM, fill= "x")
+
+    OutputText = tk.Text(CmdLineWindow, height= 440, width= 370,
+                         yscrollcommand = ScrollBar_V.set,
+                         xscrollcommand = ScrollBar_H.set, wrap= NONE)
+    OutputText.pack(fill=BOTH, expand=0)
+
+    # Assign the scrollbar with the text widget
+    ScrollBar_H['command'] = OutputText.xview
+    ScrollBar_V['command'] = OutputText.yview
+
+
+
