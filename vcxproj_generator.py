@@ -335,19 +335,31 @@ class GUI:
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir):
     # Create frame for MSVC config widgets
-    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' MSVC Setup ',relief=GROOVE, bd='3')
+    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
     MsvcConfigFrame.place(x=20, y=20, height=220, width=950)
 
     # Create the working dir entry box
     WdEntryBox = Entry(MsvcConfigFrame, textvariable=WorkingDir)
     WdEntryBox.place(x=20, y=20, height=35, width=750)
-    WdEntryBox.configure(font="Arial 11")
+    WdEntryBox.configure(font="times 11")
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
       command = lambda: GUI.GetAndCheckUserDir(WorkingDir), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
+
+
+    # Create a combobox for MSVC version
+    pf_title_lab = Label(MsvcConfigFrame ,text="Visual Studio Version")
+    pf_title_lab.place(x=20, y=90)
+    pf_title_lab.configure(font="times 10 bold")
+
+    text_font = ('times', '9')
+    combobox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
+    combobox['values'] =('vs2017', 'vs2019', 'vs2022')
+    combobox.place(x=20, y=120, height=35, width=250)
+
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
