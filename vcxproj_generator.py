@@ -319,15 +319,11 @@ class GUI:
     self.PrintMsvcConfigFrame(TabControl, WorkingDir)
     self.PrintCmdLineFrame(TabControl)
 
-  def GetAndCheckUserDir(WorkingDir, variant):
+  def GetAndCheckUserDir(WorkingDir):
     # the default path, is set to exe/script curdir
-    if variant == 0:
-      FolderSelected = filedialog.askdirectory()
-      WorkingDir.set(FolderSelected)
-      UserDir = WorkingDir.get()
-    # path selected from user
-    if variant == 1:
-      UserDir = WorkingDir.get()
+    FolderSelected = filedialog.askdirectory()
+    WorkingDir.set(FolderSelected)
+    UserDir = WorkingDir.get()
 
     WorkDirIsOk = (        os.path.exists(UserDir)
                    and not os.listdir(UserDir)
@@ -336,7 +332,6 @@ class GUI:
     if WorkDirIsOk == False:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected path is either empty or invalid!")
-
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir):
     # Create frame for MSVC config widgets
@@ -351,7 +346,7 @@ class GUI:
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, 0), width=20)
+      command = lambda: GUI.GetAndCheckUserDir(WorkingDir), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
 
   def PrintCmdLineFrame(self, TabControl):

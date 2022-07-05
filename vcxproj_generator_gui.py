@@ -11,7 +11,7 @@ from vcxproj_generator import *
 # --- Create the parent window (root)
 root = tkinter.Tk()
 root.geometry("1000x600")
-root.configure(bg="#5c8a8a") # Light DEE4E7
+root.configure(bg="#5c8aFF") # Light DEE4E7
 
 # --- Window title
 root.title("Vcxproj-Generator version 1.0.1")
