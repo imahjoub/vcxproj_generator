@@ -351,14 +351,44 @@ class GUI:
 
 
     # Create a combobox for MSVC version
-    pf_title_lab = Label(MsvcConfigFrame ,text="Visual Studio Version")
-    pf_title_lab.place(x=20, y=90)
-    pf_title_lab.configure(font="times 10 bold")
+    MsvcVersion = Label(MsvcConfigFrame ,text="Visual Studio Version")
+    MsvcVersion.place(x=20, y=90)
+    MsvcVersion.configure(font="times 10 bold")
 
     text_font = ('times', '9')
     combobox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
     combobox['values'] =('vs2017', 'vs2019', 'vs2022')
     combobox.place(x=20, y=120, height=35, width=250)
+
+    # Create a frame for Solution configurations and platform
+    ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
+                                       text=" Solution configurations and platforms ",
+                                       relief=GROOVE, bd='2')
+    ProjectConfigFrame.configure(font="times 11 bold")
+    ProjectConfigFrame.place(x=350, y=80, height=100, width=570)
+
+    # list of project config
+    ProjectConfigList = [" Release ", " Debug "]
+                        # " Win32 "  , " x64 " ]
+
+    ProjectConfigYCordinate = [10, 40]
+
+    var1 = IntVar()    ## TBD make these vars global
+    var2 = IntVar()
+    var3 = IntVar()
+    var4 = IntVar()
+    check_button_list = (var1, var2, var3, var4)
+
+    for Idx in range(2):
+      # Create cam adapter title frame
+      ProjectConfigLabel = Label(ProjectConfigFrame ,text=ProjectConfigList[Idx])
+      ProjectConfigLabel.place(x=40, y=ProjectConfigYCordinate[Idx])
+      ProjectConfigLabel.configure(font="times 10")
+
+      # create Check buttons for command options
+      # TBD check_button_list should be declared as global variable
+      ProjectConfigLabelCheckBtn = ttk.Checkbutton(ProjectConfigFrame, variable= check_button_list[Idx],
+        onvalue=0, offvalue=1).place(x=20, y=ProjectConfigYCordinate[Idx])
 
 
   def PrintCmdLineFrame(self, TabControl):
