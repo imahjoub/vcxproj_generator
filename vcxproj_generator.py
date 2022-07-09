@@ -31,6 +31,7 @@ import tkinter as tk
 
 from dataclasses import dataclass
 from idlelib.tooltip import Hovertip
+
 from PIL import ImageTk
 from select import select
 from tkinter import ttk
@@ -364,14 +365,14 @@ class GUI:
     text_font = ('times', '9')
     combobox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
     combobox['values'] =('vs2017', 'vs2019', 'vs2022')
-    combobox.place(x=20, y=120, height=35, width=250)
+    combobox.place(x=20, y=120, height=35, width=200)
 
     # Create a frame for Solution configurations and platform
     ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
                                        text=" Solution configurations and platforms ",
                                        relief=GROOVE, bd='2')
     ProjectConfigFrame.configure(font="times 11 bold")
-    ProjectConfigFrame.place(x=350, y=80, height=100, width=570)
+    ProjectConfigFrame.place(x=250, y=80, height=100, width=500)
 
     # list of project config
     ProjectConfigList = [" Release ", " Debug "]
