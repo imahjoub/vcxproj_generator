@@ -11,15 +11,7 @@
 #              or copy at http://www.boost.org/LICENSE_1_0.txt)
 #-------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
-# Global variables
-#-------------------------------------------------------------------------------
-HEADER_EXT = ['.h', '.inl', '.hpp']
-SOURCE_EXT = ['.c', '.cc', '.cpp']
-VS_VERSION = '2015' # 2013 or 2015
-UserDir    = ""
-WorkDirIsOk = False
-
+# import python packages
 import uuid
 
 import os, sys
@@ -38,6 +30,16 @@ from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
 from tkinter.ttk import *
+
+#-------------------------------------------------------------------------------
+# Global variables
+#-------------------------------------------------------------------------------
+HEADER_EXT = ['.h', '.inl', '.hpp']
+SOURCE_EXT = ['.c', '.cc', '.cpp']
+VS_VERSION = '2015' # 2013 or 2015
+UserDir    = ""
+WorkDirIsOk = False
+
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -322,8 +324,8 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, TabControl, WorkingDir):
-    self.PrintMsvcConfigFrame(TabControl, WorkingDir)
+  def __init__(self, TabControl, WorkingDir, CheckBtnList):
+    self.PrintMsvcConfigFrame(TabControl, WorkingDir, CheckBtnList)
     self.PrintCmdLineFrame(TabControl)
 
   def GetAndCheckUserDir(WorkingDir):
@@ -340,7 +342,7 @@ class GUI:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected path is either empty or invalid!")
 
-  def PrintMsvcConfigFrame(self, TabControl, WorkingDir):
+  def PrintMsvcConfigFrame(self, TabControl, WorkingDir, CheckBtnList):
     # Create frame for MSVC config widgets
     MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
@@ -380,12 +382,6 @@ class GUI:
 
     ProjectConfigYCordinate = [10, 40]
 
-    var1 = IntVar()    ## TBD make these vars global
-    var2 = IntVar()
-    var3 = IntVar()
-    var4 = IntVar()
-    check_button_list = (var1, var2, var3, var4)
-
     for Idx in range(2):
       # Create cam adapter title frame
       ProjectConfigLabel = Label(ProjectConfigFrame ,text=ProjectConfigList[Idx])
@@ -394,8 +390,10 @@ class GUI:
 
       # create Check buttons for command options
       # TBD check_button_list should be declared as global variable
-      ProjectConfigLabelCheckBtn = ttk.Checkbutton(ProjectConfigFrame, variable= check_button_list[Idx],
-        onvalue=1, offvalue=0).place(x=20, y=ProjectConfigYCordinate[Idx])
+      ProjectConfigLabelCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
+                                   variable= CheckBtnList[Idx],
+                                   onvalue=1, offvalue=0).place(x=20,
+                                   y=ProjectConfigYCordinate[Idx])
 
 
   def PrintCmdLineFrame(self, TabControl):
@@ -419,6 +417,3 @@ class GUI:
     # Assign the scrollbar with the text widget
     ScrollBar_H['command'] = OutputText.xview
     ScrollBar_V['command'] = OutputText.yview
-
-
-
