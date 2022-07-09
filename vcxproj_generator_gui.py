@@ -48,6 +48,16 @@ PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
 
 
+#-------------------------------------------------------------------------------
+# Global variables
+#-------------------------------------------------------------------------------
+var1 = IntVar(value=0)    # TBD change names
+var2 = IntVar(value=0)
+var3 = IntVar(value=0)
+var4 = IntVar(value=0)
+CheckBtnList = (var1, var2, var3, var4)
+
+
 
 #-----------------------------------------------------------------------------------
 # --- main function
@@ -66,7 +76,7 @@ CONFIGURATIONS  = ['Debug', 'Release']
 #-----------------------------------------------------------------------------------
 # --- frame 1: MSVC Setup
 #-----------------------------------------------------------------------------------
-GUI(TabControl, WorkingDir)
+GUI(TabControl, WorkingDir, CheckBtnList)
 
 #-----------------------------------------------------------------------------------
 # --- Mainloop: loop forever until the user exits the window
