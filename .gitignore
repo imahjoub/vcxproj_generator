@@ -1,10 +1,7 @@
 
-vcxproj-generator-gui.vcxproj
-vcxproj-generator-gui.vcxproj.filters
+*.vcxproj
+*.vcxproj.filters
 __pycache__/vcxproj_generator.cpython-310.pyc
 *.user
-.vs/vcxproj-generator-gui/v17/.suo
-.vs/vcxproj-generator-gui/FileContentIndex/read.lock
-.vs/vcxproj-generator-gui/FileContentIndex/53a09471-cf8d-43f2-8984-205a59c66679.vsidx
-.vs/vcxproj-generator-gui/v17/Browse.VC.db
+.vs/*
 __pycache__/vcxproj_generator_gui.cpython-310.pyc
