@@ -395,7 +395,7 @@ class GUI:
       # create Check buttons for command options
       # TBD check_button_list should be declared as global variable
       ProjectConfigLabelCheckBtn = ttk.Checkbutton(ProjectConfigFrame, variable= check_button_list[Idx],
-        onvalue=0, offvalue=1).place(x=20, y=ProjectConfigYCordinate[Idx])
+        onvalue=1, offvalue=0).place(x=20, y=ProjectConfigYCordinate[Idx])
 
 
   def PrintCmdLineFrame(self, TabControl):
