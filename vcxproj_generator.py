@@ -1,13 +1,19 @@
-'''
-Copyright Iliass Mahjoub 2022.
-Distributed under MIT License
-Version 1.0. (See accompanying file LICENSE
-or copy at https://opensource.org/licenses/MIT)
-'''
+#-------------------------------------------------------------------------------
+# Name     :   vcxproj_generator
+#
+# Author   :   Iliass Mahjoub
+#
+# Created  :   28/06/2022
+# Copyright:   (c) Iliass Mahjoub
+#
+# Licence  :   Distributed under the Boost Software License,
+#              Version 1.0. (See accompanying file LICENSE_1_0.txt
+#              or copy at http://www.boost.org/LICENSE_1_0.txt)
+#-------------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Global variables
-#-----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
