@@ -371,30 +371,38 @@ class GUI:
 
     # Create a frame for Solution configurations and platform
     ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
-                                       text=" Solution configurations and platforms ",
-                                       relief=GROOVE, bd='2')
+                         text=" Solution configurations and platforms ",
+                         relief=GROOVE, bd='2')
     ProjectConfigFrame.configure(font="times 11 bold")
-    ProjectConfigFrame.place(x=250, y=80, height=100, width=500)
+    ProjectConfigFrame.place(x=250, y=80, height=100, width=400)
 
     # list of project config
-    ProjectConfigList = [" Release ", " Debug "]
-                        # " Win32 "  , " x64 " ]
+    ProjectConfigList   = [" Release ", " Debug " ]
+    ProjectPlatformList = [" Win32 "  , " x64 " ]
 
     ProjectConfigYCordinate = [10, 40]
 
     for Idx in range(2):
-      # Create cam adapter title frame
+      # Create project config labels
       ProjectConfigLabel = Label(ProjectConfigFrame ,text=ProjectConfigList[Idx])
       ProjectConfigLabel.place(x=40, y=ProjectConfigYCordinate[Idx])
       ProjectConfigLabel.configure(font="times 10")
 
-      # create Check buttons for command options
-      # TBD check_button_list should be declared as global variable
-      ProjectConfigLabelCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                                   variable= CheckBtnList[Idx],
-                                   onvalue=1, offvalue=0).place(x=20,
-                                   y=ProjectConfigYCordinate[Idx])
+      ProjectplatformLabel = Label(ProjectConfigFrame ,text=ProjectPlatformList[Idx])
+      ProjectplatformLabel.place(x=140, y=ProjectConfigYCordinate[Idx])
+      ProjectplatformLabel.configure(font="times 10")
 
+
+      # Create project config checkbuttons
+      ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
+                              variable= CheckBtnList[Idx],
+                              onvalue=1, offvalue=0).place(x=20,
+                              y=ProjectConfigYCordinate[Idx])
+
+      ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
+                                variable= CheckBtnList[Idx],
+                                onvalue=1, offvalue=0).place(x=120,
+                                y=ProjectConfigYCordinate[Idx])
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
