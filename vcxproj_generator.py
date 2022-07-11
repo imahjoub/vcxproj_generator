@@ -342,6 +342,9 @@ class GUI:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected path is either empty or invalid!")
 
+  def GenerateVcxprojFile():
+    print("TBDDDDDDD")
+
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, CheckBtnList):
     # Create frame for MSVC config widgets
     MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',relief=GROOVE, bd='3')
@@ -358,6 +361,11 @@ class GUI:
       command = lambda: GUI.GetAndCheckUserDir(WorkingDir), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
 
+
+    # Create the run programm button
+    GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate vcxproj file",
+      command = lambda: GUI.GenerateVcxprojFile(), width=30)
+    GenerateBtN.place(x=700, y=100, height=60)
 
     # Create a combobox for MSVC version
     MsvcVersion = Label(MsvcConfigFrame ,text="Visual Studio Version")
@@ -403,6 +411,10 @@ class GUI:
                                 variable= CheckBtnList[Idx],
                                 onvalue=1, offvalue=0).place(x=120,
                                 y=ProjectConfigYCordinate[Idx])
+
+
+
+
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
