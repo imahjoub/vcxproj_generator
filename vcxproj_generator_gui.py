@@ -83,4 +83,3 @@ GUI(TabControl, WorkingDir, CheckBtnList)
 #               or waits for any events from the user
 #-----------------------------------------------------------------------------------
 root.mainloop()
-
