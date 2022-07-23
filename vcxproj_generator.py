@@ -379,8 +379,8 @@ class GUI:
 
     # Create a frame for Solution configurations and platform
     ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
-                         text=" Solution configurations and platforms ",
-                         relief=GROOVE, bd='2')
+      text=" Solution configurations and platforms ",
+      relief=GROOVE, bd='2')
     ProjectConfigFrame.configure(font="times 11 bold")
     ProjectConfigFrame.place(x=250, y=80, height=100, width=400)
 
@@ -403,17 +403,14 @@ class GUI:
 
       # Create project config checkbuttons
       ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                              variable= CheckBtnList[Idx],
-                              onvalue=1, offvalue=0).place(x=20,
-                              y=ProjectConfigYCordinate[Idx])
+        variable= CheckBtnList[Idx],
+        onvalue=1, offvalue=0).place(x=20,
+        y=ProjectConfigYCordinate[Idx])
 
       ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                                variable= CheckBtnList[Idx],
-                                onvalue=1, offvalue=0).place(x=120,
-                                y=ProjectConfigYCordinate[Idx])
-
-
-
+        variable= CheckBtnList[Idx],
+        onvalue=1, offvalue=0).place(x=120,
+        y=ProjectConfigYCordinate[Idx])
 
 
   def PrintCmdLineFrame(self, TabControl):
