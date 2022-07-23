@@ -324,8 +324,8 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, TabControl, WorkingDir, CheckBtnList):
-    self.PrintMsvcConfigFrame(TabControl, WorkingDir, CheckBtnList)
+  def __init__(self, TabControl, WorkingDir, CheckBtnVarList):
+    self.PrintMsvcConfigFrame(TabControl, WorkingDir, CheckBtnVarList)
     self.PrintCmdLineFrame(TabControl)
 
   def GetAndCheckUserDir(WorkingDir):
@@ -408,7 +408,7 @@ class GUI:
         y=ProjectConfigYCordinate[Idx])
 
       ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-        variable= CheckBtnList[Idx],
+        variable= CheckBtnList[Idx + 2],  # tbd change this hard coded idx iteration
         onvalue=1, offvalue=0).place(x=120,
         y=ProjectConfigYCordinate[Idx])
 
