@@ -340,7 +340,7 @@ class GUI:
 
     if WorkDirIsOk == False:
       # show error message box
-      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected path is either empty or invalid!")
+      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
   def GenerateVcxprojFile():
     print("TBDDDDDDD")
