@@ -38,6 +38,10 @@ root.resizable(0,0)
 TabControl = ttk.Notebook(root)
 TabControl.pack(expand=1, fill="both")
 
+# --- Create Tabs and disable it since we only have one ATM
+MainTab = ttk.Frame(TabControl)
+TabControl.add(MainTab, text="")
+
 # ---- Global variable for User setup
 WorkingDir      = StringVar()
 WorkingDir.set(os.getcwd())
