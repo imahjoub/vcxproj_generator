@@ -343,7 +343,15 @@ class GUI:
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
   def GenerateVcxprojFile():
-    print("TBDDDDDDD")
+    # pass all require var to this function.
+    # vs studio version (comboxbox) and then get its value
+    # user working dir (check the global var WorkDirIsOk)
+    # vs config and and platform var are they set ot not
+    # call a sub function for the check
+    # if everything ok call first generator with provided var
+    print("due date is 30.07.22")
+
+
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, CheckBtnList):
     # Create frame for MSVC config widgets
