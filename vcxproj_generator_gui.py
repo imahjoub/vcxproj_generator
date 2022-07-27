@@ -77,6 +77,10 @@ CheckBtnVarList = (RelaseVar, DebugVar, X64Var, Win32Var)
 
 #main(PATHS_TO_SEARCH, PROJECT_NAME, PLATFORMS, CONFIGURATIONS)
 
+#   def combobox_selection(cbx, sx_pf_frame, sxpf_setup_list, adap_box_y_cordinate):
+#      # Get the index of selected element in combobox
+#      cbx_idx = cbx.current()
+
 #-----------------------------------------------------------------------------------
 # --- frame 1: MSVC Setup
 #-----------------------------------------------------------------------------------

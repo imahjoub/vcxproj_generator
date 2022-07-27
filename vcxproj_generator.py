@@ -334,13 +334,13 @@ class GUI:
     WorkingDir.set(FolderSelected)
     UserDir = WorkingDir.get()
 
-    WorkDirIsOk = (        os.path.exists(UserDir)
-                   and not os.listdir(UserDir)
-                   and not FolderSelected)
+    WorkDirIsOk = (     os.path.exists(UserDir)
+                    and len(os.listdir(UserDir)))
 
     if WorkDirIsOk == False:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
+
 
   def GenerateVcxprojFile():
     # pass all require var to this function.
