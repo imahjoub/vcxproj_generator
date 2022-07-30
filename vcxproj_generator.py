@@ -38,6 +38,12 @@ HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
 
+PATHS_TO_SEARCH = ['.']
+PROJECT_NAME    = '' # by default will use current directory name
+PLATFORMS       = ['Win32', 'x64']
+CONFIGURATIONS  = ['Debug', 'Release']
+
+
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -340,16 +346,24 @@ class GUI:
 
 
   def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
-    global WorkDirIsOk
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
     PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
     PathIsOk      =  AllVarList[4].get() != 0
     MSVSVerIsOk   =  CombBox.current()   != -1
 
+    def main_xx(WorkingDir, platforms, configurations):
+        name = os.path.split(os.getcwd())[-1]
+        generator = Generator(name, PLATFORMS, CONFIGURATIONS)
+        #for root, dirs, files in os.walk(dir):
+        for path in PATHS_TO_SEARCH:
+            generator.Walk(path)
+        generator.Generate()
+
     if PathIsOk == True:
       if MSVSVerIsOk == True:
         if SlnConfigIsOk == True and PlatformIsOk == True:
-          Generator
+
+          main_xx(WorkingDir, PLATFORMS, CONFIGURATIONS)
         else:
           tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
       else:
