@@ -37,8 +37,6 @@ from tkinter.ttk import *
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
-UserDir    = ""
-WorkDirIsOk = False
 
 #-----------------------------------------------------------------------------------
 # Global functions
@@ -324,41 +322,43 @@ class Generator:
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
-  def __init__(self, TabControl, WorkingDir, CheckBtnVarList):
-    self.PrintMsvcConfigFrame(TabControl, WorkingDir, CheckBtnVarList)
+  def __init__(self, TabControl, WorkingDir, AllVarList):
+    self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList)
     self.PrintCmdLineFrame(TabControl)
 
-  def GetAndCheckUserDir(WorkingDir):
+  def GetAndCheckUserDir(WorkingDir, AllVarList):
     # help function for "select folder" button
     FolderSelected = filedialog.askdirectory()
     WorkingDir.set(FolderSelected)
-    UserDir = WorkingDir.get()
     #check if given path exists and not empty
-    WorkDirIsOk = (     os.path.exists(UserDir)
-                    and len(os.listdir(UserDir)))
+    AllVarList[4].set(    os.path.exists(WorkingDir.get())
+                      and len(os.listdir(WorkingDir.get())))
 
-    if WorkDirIsOk == False:
+    if AllVarList[4].get() == 0:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
 
-  def GenerateVcxprojFile(combobox, WorkingDir, CheckBtnVarList):
-    # pass all require var to this function.
-    # vs studio version (comboxbox) and then get its value
-    # user working dir (check the global var WorkDirIsOk)
-    # vs config and and platform var are they set ot not
-    # call a sub function for the check
-    # if everything ok call first generator with provided var
-    print(combobox.current())
-    print(WorkingDir.get())
-    print(CheckBtnVarList[0].get())
-    print(CheckBtnVarList[1].get())
-    print(CheckBtnVarList[2].get())
-    print(CheckBtnVarList[3].get())
+  def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
+    global WorkDirIsOk
+    SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
+    PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
+    PathIsOk      =  AllVarList[4].get() != 0
+    MSVSVerIsOk   =  CombBox.current()   != -1
+
+    if PathIsOk == True:
+      if MSVSVerIsOk == True:
+        if SlnConfigIsOk == True and PlatformIsOk == True:
+          Generator
+        else:
+          tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
+      else:
+        tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: MSVS is not selected!")
+    else:
+      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Folder is not selected or empty!")
 
 
-
-  def PrintMsvcConfigFrame(self, TabControl, WorkingDir, CheckBtnVarList):
+  def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList):
     # Create frame for MSVC config widgets
     MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
@@ -371,7 +371,7 @@ class GUI:
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-      command = lambda: GUI.GetAndCheckUserDir(WorkingDir), width=20)
+      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, AllVarList), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
 
     # Create a combobox for MSVC version
@@ -380,14 +380,14 @@ class GUI:
     MsvcVersion.configure(font="times 10 bold")
 
     text_font = ('times', '9')
-    combobox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
-    combobox['values'] =('vs2017', 'vs2019', 'vs2022')
-    combobox.place(x=20, y=120, height=35, width=200)
+    CombBox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
+    CombBox['values'] =('vs2017', 'vs2019', 'vs2022')
+    CombBox.place(x=20, y=120, height=35, width=200)
 
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate vcxproj files",
       command = lambda:
-        GUI.GenerateVcxprojFile(combobox, WorkingDir, CheckBtnVarList), width=30)
+        GUI.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList), width=30)
     GenerateBtN.place(x=700, y=100, height=60)
 
     # Create a frame for Solution configurations and platform
@@ -416,12 +416,12 @@ class GUI:
 
       # Create project config checkbuttons
       ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-        variable= CheckBtnVarList[Idx],
+        variable= AllVarList[Idx],
         onvalue=1, offvalue=0).place(x=20,
         y=ProjectConfigYCordinate[Idx])
 
       ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-        variable= CheckBtnVarList[Idx + 2],  # TBD change this hard coded iteration
+        variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
         onvalue=1, offvalue=0).place(x=120,
         y=ProjectConfigYCordinate[Idx])
 

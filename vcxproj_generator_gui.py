@@ -43,8 +43,10 @@ MainTab = ttk.Frame(TabControl)
 TabControl.add(MainTab, text="")
 
 # ---- Global variable for User setup
-WorkingDir      = StringVar()
+WorkingDir    = StringVar()
+CurDirCount   = len(os.listdir(os.getcwd())) # check if curdir is empty
 WorkingDir.set(os.getcwd())
+
 # +++++++++++
 PATHS_TO_SEARCH = ['.']
 PROJECT_NAME    = '' # by default will use current directory name
@@ -59,7 +61,8 @@ RelaseVar       = IntVar(value=0)
 DebugVar        = IntVar(value=0)
 X64Var          = IntVar(value=0)
 Win32Var        = IntVar(value=0)
-CheckBtnVarList = (RelaseVar, DebugVar, X64Var, Win32Var)
+WorkDirIsOk     = IntVar(value=CurDirCount)
+AllVarList      = (RelaseVar, DebugVar, X64Var, Win32Var, WorkDirIsOk)
 
 
 
@@ -84,7 +87,7 @@ CheckBtnVarList = (RelaseVar, DebugVar, X64Var, Win32Var)
 #-----------------------------------------------------------------------------------
 # --- frame 1: MSVC Setup
 #-----------------------------------------------------------------------------------
-GUI(TabControl, WorkingDir, CheckBtnVarList)
+GUI(TabControl, WorkingDir, AllVarList)
 
 #-----------------------------------------------------------------------------------
 # --- Mainloop: loop forever until the user exits the window
