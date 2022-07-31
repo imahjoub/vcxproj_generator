@@ -30,7 +30,7 @@ from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
 from tkinter.ttk import *
-
+from fnmatch import fnmatch
 #-------------------------------------------------------------------------------
 # Global variables
 #-------------------------------------------------------------------------------
@@ -38,7 +38,6 @@ HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 VS_VERSION = '2015' # 2013 or 2015
 
-PATHS_TO_SEARCH = ['.']
 PROJECT_NAME    = '' # by default will use current directory name
 PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
@@ -247,11 +246,13 @@ class Generator:
         self.AddFolder(path)
 
     def Walk(self, path):
-        if os.path.isfile(path):
-            self.AddFile(path)
-        else:
-            for subPath in os.listdir(path):
-                self.Walk(os.path.join(path, subPath))
+        for path, subdirs, files in os.walk(path):
+            for filename in files:
+              # TBD hier we need the get the filename with its pathname
+                 print(filename)
+                 print("++++++")
+                 print(subdirs)
+                 self.AddFile(filename)
 
     def CreateProject(self):
         project = []
@@ -344,6 +345,11 @@ class GUI:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
+  def main_xx(WorkingDir, platforms, configurations):
+    name = os.path.split(os.getcwd())[-1]
+    generator = Generator(name, PLATFORMS, CONFIGURATIONS)
+    generator.Walk(WorkingDir.get())
+    generator.Generate()
 
   def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
@@ -351,19 +357,11 @@ class GUI:
     PathIsOk      =  AllVarList[4].get() != 0
     MSVSVerIsOk   =  CombBox.current()   != -1
 
-    def main_xx(WorkingDir, platforms, configurations):
-        name = os.path.split(os.getcwd())[-1]
-        generator = Generator(name, PLATFORMS, CONFIGURATIONS)
-        #for root, dirs, files in os.walk(dir):
-        for path in PATHS_TO_SEARCH:
-            generator.Walk(path)
-        generator.Generate()
-
     if PathIsOk == True:
       if MSVSVerIsOk == True:
         if SlnConfigIsOk == True and PlatformIsOk == True:
 
-          main_xx(WorkingDir, PLATFORMS, CONFIGURATIONS)
+          GUI.main_xx(WorkingDir, PLATFORMS, CONFIGURATIONS)
         else:
           tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
       else:
