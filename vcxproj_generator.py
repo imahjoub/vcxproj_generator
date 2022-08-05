@@ -246,7 +246,8 @@ class Generator:
         self.AddFolder(path)
 
     def Walk(self, path):
-      # add old code,
+      # TBD
+      # revert all changes and add old code,
       # print command to understand how the algortihm works here
       # after that delete the bullshit code and make a significant implementation
 
