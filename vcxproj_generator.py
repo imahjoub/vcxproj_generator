@@ -246,13 +246,21 @@ class Generator:
         self.AddFolder(path)
 
     def Walk(self, path):
-        for path, subdirs, files in os.walk(path):
-            for filename in files:
-              # TBD hier we need the get the filename with its pathname
-                 print(filename)
-                 print("++++++")
-                 print(subdirs)
-                 self.AddFile(filename)
+      # add old code,
+      # print command to understand how the algortihm works here
+      # after that delete the bullshit code and make a significant implementation
+
+      listOfFile = os.listdir(path)
+      allFiles = list()
+      # Iterate over all the entries
+      for entry in listOfFile:
+        # Create full path
+        fullPath = os.path.join(path, entry)
+        if os.path.isdir(fullPath):
+           self.Walk(fullPath)
+        else:
+           print(fullPath)
+           self.AddFile(fullPath)
 
     def CreateProject(self):
         project = []
