@@ -42,7 +42,6 @@ PROJECT_NAME    = '' # by default will use current directory name
 PLATFORMS       = ['Win32', 'x64']
 CONFIGURATIONS  = ['Debug', 'Release']
 
-
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -229,39 +228,36 @@ class Generator:
                 if filters != '':
                     self.Folders.add(filters)
 
-    def AddSource(self, path):
-        self.Sources.add(path)
+    def AddSource(self, Filename):
+        LocalDir = "".join(( ".\\", Filename))
+        self.Sources.add(str(LocalDir))
 
-    def AddHeader(self, path):
-        self.Includes.add(path)
+    def AddHeader(self, Filename):
+        LocalDir = "".join(( ".\\", Filename))
+        self.Includes.add(str(LocalDir))
 
-    def AddFile(self, path):
-        (root, ext) = os.path.splitext(path)
+    def RemoveRelativPath(self, Dir, RootDir):
+        RootDir = "".join((RootDir, "\\"))
+        LocalDir = Dir.replace(RootDir, "")
+        return LocalDir
+
+    def AddFile(self, Dir, RootDir):
+        LocalDir = self.RemoveRelativPath(Dir, RootDir)
+        (root, ext) = os.path.splitext(Dir)
         if ext in HEADER_EXT:
-            self.AddHeader(path)
+            self.AddHeader(str(LocalDir))
         elif ext in SOURCE_EXT:
-            self.AddSource(path)
+            self.AddSource(str(LocalDir))
         else:
             return
-        self.AddFolder(path)
+        self.AddFolder(str(LocalDir))
 
-    def Walk(self, path):
-      # TBD
-      # revert all changes and add old code,
-      # print command to understand how the algortihm works here
-      # after that delete the bullshit code and make a significant implementation
-
-      listOfFile = os.listdir(path)
-      allFiles = list()
-      # Iterate over all the entries
-      for entry in listOfFile:
-        # Create full path
-        fullPath = os.path.join(path, entry)
-        if os.path.isdir(fullPath):
-           self.Walk(fullPath)
+    def Walk(self,Dir, RootDir):
+        if os.path.isfile(Dir):
+            self.AddFile(Dir, RootDir)
         else:
-           print(fullPath)
-           self.AddFile(fullPath)
+            for subPath in os.listdir(Dir):
+                self.Walk(os.path.join(Dir, subPath), RootDir)
 
     def CreateProject(self):
         project = []
@@ -334,6 +330,7 @@ class Generator:
         f.write(self.CreateFilters())
         f.close()
 
+
 #-----------------------------------------------------------------------------------
 # --- GUI class
 #-----------------------------------------------------------------------------------
@@ -357,8 +354,14 @@ class GUI:
   def main_xx(WorkingDir, platforms, configurations):
     name = os.path.split(os.getcwd())[-1]
     generator = Generator(name, PLATFORMS, CONFIGURATIONS)
-    generator.Walk(WorkingDir.get())
+
+    RootDir = WorkingDir.get()
+    path_as_list = list(RootDir.split(","))
+    paths = ['.']
+    for Dir in path_as_list:
+        generator.Walk(Dir, RootDir)
     generator.Generate()
+
 
   def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
