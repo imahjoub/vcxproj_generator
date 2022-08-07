@@ -79,7 +79,7 @@ class Vcxproj:
     # configuration, platform
     ConfigurationT = '\n'.join([
             '    <ProjectConfiguration Include="{0}|{1}">',
-            '      <Configuration>Debug</Configuration>',
+            '      <Configuration>{0}</Configuration>',
             '      <Platform>{1}</Platform>',
             '    </ProjectConfiguration>'])
     # project name, project uuid
