@@ -36,6 +36,7 @@ from fnmatch import fnmatch
 #-------------------------------------------------------------------------------
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
+NONE_EXT   = ['.gmk', '.ld']
 VS_VERSION = '2015' # 2013 or 2015
 
 PROJECT_NAME    = '' # by default will use current directory name
@@ -131,6 +132,9 @@ class Vcxproj:
     IncludesT = '    <ClInclude Include="{0}" />'
     # path
     SourcesT = '    <ClCompile Include="{0}" />'
+    # path
+    NonesT   = '    <None Include="{0}" />'
+
 
     ImportTargets = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />'
     ImportProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />'
@@ -159,6 +163,9 @@ class Vcxproj:
     @staticmethod
     def Sources(name):
         return Vcxproj.SourcesT.format(name)
+    @staticmethod
+    def Nones(name):
+        return Vcxproj.NonesT.format(name)
 
 #-----------------------------------------------------------------------------------
 # --- Filters class
@@ -175,6 +182,11 @@ class Filters:
         '      <Filter>{1}</Filter>',
         '    </ClCompile>'])
     # path, folder
+    NonesT = '\n'.join([
+        '    <None Include="{0}">',
+        '      <Filter>{1}</Filter>',
+        '    </None>'])
+    # path, folder
     IncludesT = '\n'.join([
         '    <ClInclude Include="{0}">',
         '      <Filter>{1}</Filter>',
@@ -185,6 +197,10 @@ class Filters:
         '      <UniqueIdentifier>{{{1}}}</UniqueIdentifier>',
         '    </Filter>'])
 
+    @staticmethod
+    def Nones(path):
+        folder = FilterFromPath(path)
+        return Filters.NonesT.format(path, folder)
     @staticmethod
     def Sources(path):
         folder = FilterFromPath(path)
@@ -202,12 +218,13 @@ class Filters:
 # --- Generator class
 #-----------------------------------------------------------------------------------
 class Generator:
-    Folders = set()
-    Includes = set()
-    Sources = set()
-    Platforms = set()
+    Folders        = set()
+    Includes       = set()
+    Sources        = set()
+    Nones          = set()
+    Platforms      = set()
     Configurations = set()
-    Name = ''
+    Name           = ''
 
     def __init__(self, name, platforms, configurations):
         self.Name = name
@@ -215,6 +232,14 @@ class Generator:
             self.Platforms.add(platform)
         for configuration in configurations:
             self.Configurations.add(configuration)
+
+        print("--- Platform ----")
+        for idx in self.Platforms:
+          print(idx)
+
+        print("--- Config ----")
+        for idx in self.Configurations:
+          print(idx)
 
     def AddFolder(self, path):
         filt = FilterFromPath(path)
@@ -232,6 +257,10 @@ class Generator:
         LocalDir = "".join(( ".\\", Filename))
         self.Sources.add(str(LocalDir))
 
+    def AddNone(self, Filename):
+        LocalDir = "".join(( ".\\", Filename))
+        self.Nones.add(str(LocalDir))
+
     def AddHeader(self, Filename):
         LocalDir = "".join(( ".\\", Filename))
         self.Includes.add(str(LocalDir))
@@ -248,6 +277,8 @@ class Generator:
             self.AddHeader(str(LocalDir))
         elif ext in SOURCE_EXT:
             self.AddSource(str(LocalDir))
+        elif ext in NONE_EXT:
+            self.AddNone(str(LocalDir))
         else:
             return
         self.AddFolder(str(LocalDir))
@@ -295,6 +326,12 @@ class Generator:
         project.append(Vcxproj.ItemGroup1)
         project.append(Vcxproj.ImportTargets)
 
+        project.append(Vcxproj.ItemGroup0)
+        for f in self.Nones:
+            project.append(Vcxproj.Nones(f))
+        project.append(Vcxproj.ItemGroup1)
+        project.append(Vcxproj.ImportTargets)
+
         project.append(Vcxproj.Project1)
         return '\n'.join(project)
 
@@ -306,6 +343,11 @@ class Generator:
         project.append(Filters.ItemGroup0)
         for f in self.Folders:
             project.append(Filters.Folders(f))
+        project.append(Filters.ItemGroup1)
+
+        project.append(Filters.ItemGroup0)
+        for f in self.Nones:
+            project.append(Filters.Nones(f))
         project.append(Filters.ItemGroup1)
 
         project.append(Filters.ItemGroup0)
@@ -329,6 +371,18 @@ class Generator:
         f = open(self.Name + '.vcxproj.filters', 'w')
         f.write(self.CreateFilters())
         f.close()
+
+        print("--- Source Files ---")
+        for idx in self.Sources:
+          print(idx)
+
+        print("--- None Files ---")
+        for idx in self.Nones:
+          print(idx)
+
+        print("--- Header Files ---")
+        for idx in self.Includes:
+          print(idx)
 
 
 #-----------------------------------------------------------------------------------
@@ -361,6 +415,10 @@ class GUI:
     for Dir in path_as_list:
         generator.Walk(Dir, RootDir)
     generator.Generate()
+
+
+  #def GetPlatforms(AllVarList, PLATFORMS):
+
 
 
   def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
