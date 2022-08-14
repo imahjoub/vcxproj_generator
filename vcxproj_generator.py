@@ -40,8 +40,6 @@ NONE_EXT   = ['.gmk', '.ld']
 VS_VERSION = '2015' # 2013 or 2015
 
 PROJECT_NAME    = '' # by default will use current directory name
-PLATFORMS       = ['Win32', 'x64']
-CONFIGURATIONS  = ['Debug', 'Release']
 
 #-----------------------------------------------------------------------------------
 # Global functions
@@ -233,14 +231,6 @@ class Generator:
         for configuration in configurations:
             self.Configurations.add(configuration)
 
-        print("--- Platform ----")
-        for idx in self.Platforms:
-          print(idx)
-
-        print("--- Config ----")
-        for idx in self.Configurations:
-          print(idx)
-
     def AddFolder(self, path):
         filt = FilterFromPath(path)
         if filt == '':
@@ -364,6 +354,12 @@ class Generator:
         return '\n'.join(project)
 
     def Generate(self):
+        # Check if file exists and delete them
+        if os.path.exists(self.Name + '.vcxproj'):
+           os.remove(self.Name + '.vcxproj')
+        if os.path.exists(self.Name + '.vcxproj'):
+           os.remove(self.Name + '.vcxproj.filters')
+
         f = open(self.Name + '.vcxproj', 'w')
         f.write(self.CreateProject())
         f.close()
@@ -372,28 +368,31 @@ class Generator:
         f.write(self.CreateFilters())
         f.close()
 
-        print("--- Source Files ---")
-        for idx in self.Sources:
-          print(idx)
+       # print("--- Source Files ---")
+       # for idx in self.Sources:
+       #   print(idx)
 
-        print("--- None Files ---")
-        for idx in self.Nones:
-          print(idx)
+       # print("--- None Files ---")
+       # for idx in self.Nones:
+       #   print(idx)
 
-        print("--- Header Files ---")
-        for idx in self.Includes:
-          print(idx)
+       # print("--- Header Files ---")
+       # for idx in self.Includes:
+       #   print(idx)
 
 
 #-----------------------------------------------------------------------------------
 # --- GUI class
 #-----------------------------------------------------------------------------------
 class GUI:
+  Configurations = []
+  Platforms      = []
+
   def __init__(self, TabControl, WorkingDir, AllVarList):
     self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList)
     self.PrintCmdLineFrame(TabControl)
 
-  def GetAndCheckUserDir(WorkingDir, AllVarList):
+  def GetAndCheckUserDir(self,WorkingDir, AllVarList):
     # help function for "select folder" button
     FolderSelected = filedialog.askdirectory()
     WorkingDir.set(FolderSelected)
@@ -405,23 +404,59 @@ class GUI:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
-  def main_xx(WorkingDir, platforms, configurations):
+  def main_xx(self, WorkingDir, Platforms, Configurations):
     name = os.path.split(os.getcwd())[-1]
-    generator = Generator(name, PLATFORMS, CONFIGURATIONS)
+    generator = Generator(name, Platforms, Configurations)
+
+    #print("******************")
+    #for idx in Platforms:
+    #  print(idx)
+    #for idx in Configurations:
+    #  print(idx)
+    #print("******************")
 
     RootDir = WorkingDir.get()
     path_as_list = list(RootDir.split(","))
-    paths = ['.']
     for Dir in path_as_list:
         generator.Walk(Dir, RootDir)
     generator.Generate()
 
+  def GetProjectConfig(self, AllVarList):
+    print("####################################################################")
+    self.Configurations.clear()
+    self.Platforms.clear()
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() == 0):
+        print("***** Release *****")
+        self.Configurations = ['Release']
 
-  #def GetPlatforms(AllVarList, PLATFORMS):
+    if (AllVarList[0].get() == 0 and AllVarList[1].get() != 0):
+        print("****** Debug ******")
+        self.Configurations = ['Debug']
+
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() != 0):
+        print("**** Release - Debug ****")
+        self.Configurations = ['Release', 'Debug']
+
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() == 0):
+        print("****** Win32 ********")
+        self.Platforms = ['Win32']
+    if (AllVarList[2].get() == 0 and AllVarList[3].get() != 0):
+       print("****** x64 ********")
+       self.Platforms = ['x64']
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0):
+        print("***** Win32 - x64 ******")
+        self.Platforms = ['x64', 'Win32']
+
+    for idx_1 in self.Configurations:
+      print(idx_1)
+    for idx_2 in self.Platforms:
+      print(idx_2)
 
 
 
-  def GenerateVcxprojFile(CombBox, WorkingDir, AllVarList):
+    print("####################################################################")
+
+  def GenerateVcxprojFile(self, CombBox, WorkingDir, AllVarList):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
     PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
     PathIsOk      =  AllVarList[4].get() != 0
@@ -430,8 +465,12 @@ class GUI:
     if PathIsOk == True:
       if MSVSVerIsOk == True:
         if SlnConfigIsOk == True and PlatformIsOk == True:
-
-          GUI.main_xx(WorkingDir, PLATFORMS, CONFIGURATIONS)
+          self.GetProjectConfig(AllVarList)
+          #for idx in self.Platforms:
+          #  print("+++++++")
+          #  print(idx)
+          #  print("+++++++")
+          self.main_xx(WorkingDir, self.Platforms, self.Configurations)
         else:
           tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
       else:
@@ -469,7 +508,7 @@ class GUI:
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate vcxproj files",
       command = lambda:
-        GUI.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList), width=30)
+        self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList), width=30)
     GenerateBtN.place(x=700, y=100, height=60)
 
     # Create a frame for Solution configurations and platform

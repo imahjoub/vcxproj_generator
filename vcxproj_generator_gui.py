@@ -50,8 +50,6 @@ WorkingDir.set(os.getcwd())
 # +++++++++++
 PATHS_TO_SEARCH = ['.']
 PROJECT_NAME    = '' # by default will use current directory name
-PLATFORMS       = ['Win32', 'x64']
-CONFIGURATIONS  = ['Debug', 'Release']
 
 
 #-------------------------------------------------------------------------------
@@ -62,7 +60,7 @@ DebugVar        = IntVar(value=0)
 X64Var          = IntVar(value=0)
 Win32Var        = IntVar(value=0)
 WorkDirIsOk     = IntVar(value=CurDirCount)
-AllVarList      = (RelaseVar, DebugVar, X64Var, Win32Var, WorkDirIsOk)
+AllVarList      = (RelaseVar, DebugVar, Win32Var, X64Var, WorkDirIsOk)
 
 
 
