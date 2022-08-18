@@ -39,8 +39,6 @@ SOURCE_EXT = ['.c', '.cc', '.cpp']
 NONE_EXT   = ['.gmk', '.ld']
 VS_VERSION = '2015' # 2013 or 2015
 
-PROJECT_NAME    = '' # by default will use current directory name
-
 #-----------------------------------------------------------------------------------
 # Global functions
 #-----------------------------------------------------------------------------------
@@ -222,11 +220,13 @@ class Generator:
     Nones          = set()
     Platforms      = set()
     Configurations = set()
+    ToolVersion    = set()
     Name           = ''
 
-    def __init__(self, name, AllVarList):
+    def __init__(self, name, AllVarList, ToolVersion):
       self.Name = name
       self.GetProjectConfig(AllVarList)
+      self.ToolVersion = ToolVersion
 
     def GetProjectConfig(self, AllVarList):
       self.Configurations.clear()
@@ -419,9 +419,9 @@ class GUI:
       # show error message box
       tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
-  def main_xx(self, WorkingDir, AllVarList):
+  def main_xx(self, WorkingDir, AllVarList, ToolVer):
     name = os.path.split(os.getcwd())[-1]
-    generator = Generator(name,AllVarList)
+    generator = Generator(name,AllVarList, ToolVer)
 
     RootDir = WorkingDir.get()
     path_as_list = list(RootDir.split(","))
@@ -437,8 +437,9 @@ class GUI:
 
     if PathIsOk == True:
       if MSVSVerIsOk == True:
+        ToolVer = CombBox.current()
         if SlnConfigIsOk == True and PlatformIsOk == True:
-          self.main_xx(WorkingDir, AllVarList)
+          self.main_xx(WorkingDir, AllVarList, ToolVer)
 
         else:
           tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
