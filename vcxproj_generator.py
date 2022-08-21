@@ -50,7 +50,7 @@ def Toolset():
     #defaults to vs2013
     return versions.get(VS_VERSION, '12')
 
-def UUID(name):
+def GenerateID(name):
     return str(uuid.uuid3(uuid.NAMESPACE_OID, name)).upper()
 
 def IsDebug(configuration):
@@ -89,7 +89,7 @@ class Vcxproj:
             '  <PropertyGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'" Label="Configuration">',
             '    <ConfigurationType>Application</ConfigurationType>',
             '    <UseDebugLibraries>{2}</UseDebugLibraries>',
-            '    <PlatformToolset>v{}0</PlatformToolset>'.format(Toolset()),
+            '    <PlatformToolset>{3}</PlatformToolset>',
             '    <CharacterSet>MultiByte</CharacterSet>',
             '  </PropertyGroup>'])
     # configuration, platform
@@ -139,20 +139,24 @@ class Vcxproj:
     @staticmethod
     def Configuration(configuration, platform):
         return Vcxproj.ConfigurationT.format(configuration, platform)
+
     @staticmethod
     def Globals(name):
-        uid = UUID(name)
+        uid = GenerateID(name)
         return Vcxproj.GlobalsT.format(name, uid)
+
     @staticmethod
-    def Property(configuration, platform):
+    def Property(configuration, platform, ToolVer):
         debug = 'false'
         if IsDebug(configuration) : debug = 'true'
-        return Vcxproj.PropertyT.format(configuration, platform, debug)
+        return Vcxproj.PropertyT.format(configuration, platform, debug, ToolVer)
+
     @staticmethod
     def ItemDefenition(configuration, platform):
         defenition = Vcxproj.ItemDefenitionReleaseT
         if IsDebug(configuration): defenition = Vcxproj.ItemDefenitionDebugT
         return defenition.format(configuration, platform)
+
     @staticmethod
     def Includes(name):
         return Vcxproj.IncludesT.format(name)
@@ -207,7 +211,7 @@ class Filters:
         return Filters.IncludesT.format(path, folder)
     @staticmethod
     def Folders(folder):
-        uid = UUID(folder)
+        uid = GenerateID(folder)
         return Filters.FoldersT.format(folder, uid)
 
 #-------------------------------------------------------------------------------
@@ -223,10 +227,10 @@ class Generator:
     ToolVersion    = set()
     Name           = ''
 
-    def __init__(self, name, AllVarList, ToolVersion):
-      self.Name = name
+    def __init__(self, ProjectName, AllVarList, VSVersion):
+      self.Name = ProjectName
       self.GetProjectConfig(AllVarList)
-      self.ToolVersion = ToolVersion
+      self.ToolVersion = self.GetToolSetVer(VSVersion)
 
     def GetProjectConfig(self, AllVarList):
       self.Configurations.clear()
@@ -244,6 +248,16 @@ class Generator:
         self.Platforms = ['x64']
       if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0):
         self.Platforms = ['x64', 'Win32']
+
+    def GetToolSetVer(self, ToolVer):
+      if ToolVer == 0:
+        LocalToolVer = 'v141'
+      if ToolVer == 1:
+        LocalToolVer = 'v142'
+      if ToolVer == 2:
+        LocalToolVer = 'v143'
+
+      return LocalToolVer
 
     def AddFolder(self, path):
       filt = FilterFromPath(path)
@@ -311,7 +325,7 @@ class Generator:
 
         for c in self.Configurations:
             for p in self.Platforms:
-                project.append(Vcxproj.Property(c, p))
+                project.append(Vcxproj.Property(c, p, self.ToolVersion))
 
         project.append(Vcxproj.ImportProps)
 
