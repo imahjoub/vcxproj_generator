@@ -62,24 +62,8 @@ Win32Var        = IntVar(value=0)
 WorkDirIsOk     = IntVar(value=CurDirCount)
 AllVarList      = (RelaseVar, DebugVar, Win32Var, X64Var, WorkDirIsOk)
 
-
-
 #-------------------------------------------------------------------------------
-# --- main function
-# this must be run fron GUI class
-#-------------------------------------------------------------------------------
-#def main(paths, name, platforms, configurations):
-#    if name == '':
-#        name = os.path.split(os.getcwd())[-1]
-#    generator = vcxproj_generator.Generator(name, platforms, configurations)
-#    for path in paths:
-#        generator.Walk(path)
-#    generator.Generate()
-
-#main(PATHS_TO_SEARCH, PROJECT_NAME, PLATFORMS, CONFIGURATIONS)
-
-#-------------------------------------------------------------------------------
-# --- frame 1: MSVC Setup
+# --- Run Gui
 #-------------------------------------------------------------------------------
 GUI(TabControl, WorkingDir, AllVarList)
 

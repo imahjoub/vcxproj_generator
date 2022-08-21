@@ -21,393 +21,392 @@ import threading
 import tkinter
 import tkinter as tk
 
-from dataclasses import dataclass
+from dataclasses     import dataclass
 from idlelib.tooltip import Hovertip
 
-from PIL import ImageTk
-from select import select
-from tkinter import ttk
-from tkinter import *
-from tkinter import filedialog
+from PIL         import ImageTk
+from select      import select
+from tkinter     import ttk
+from tkinter     import *
+from tkinter     import filedialog
 from tkinter.ttk import *
-from fnmatch import fnmatch
+from fnmatch     import fnmatch
 #-------------------------------------------------------------------------------
 # Global variables
 #-------------------------------------------------------------------------------
 HEADER_EXT = ['.h', '.inl', '.hpp']
 SOURCE_EXT = ['.c', '.cc', '.cpp']
 NONE_EXT   = ['.gmk', '.ld']
-VS_VERSION = '2015' # 2013 or 2015
 
 #-------------------------------------------------------------------------------
 # Global functions
 #-------------------------------------------------------------------------------
 def Toolset():
-    versions = {
-        '2013': '12',
-        '2015': '14',
-    }
-    #defaults to vs2013
-    return versions.get(VS_VERSION, '12')
+  #defaults to vs2017
+  VsVersion = '15.0'
+  return VsVersion
 
 def GenerateID(name):
-    return str(uuid.uuid3(uuid.NAMESPACE_OID, name)).upper()
+  return str(uuid.uuid3(uuid.NAMESPACE_OID, name)).upper()
 
 def IsDebug(configuration):
-    return 'debug' in configuration.lower()
+  return 'debug' in configuration.lower()
 
 def FilterFromPath(path):
-    (head, tail) = os.path.split(path)
-    head = head.replace('/', '\\').replace('..\\', '').replace('.\\', '')
-    if head == '.':
-        return ''
-    return head
+  (head, tail) = os.path.split(path)
+  head = head.replace('/', '\\').replace('..\\', '').replace('.\\', '')
+
+  if head == '.':
+    return ''
+  return head
 
 #-------------------------------------------------------------------------------
 # --- Vcxproj class
 #-------------------------------------------------------------------------------
 class Vcxproj:
-    Header = '<?xml version="1.0" encoding="utf-8"?>'
-    Project0 = '<Project DefaultTargets="Build" ToolsVersion="{}.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'.format(Toolset())
-    Project1 = '</Project>'
-    ProjectConfigurations0 = '  <ItemGroup Label="ProjectConfigurations">'
-    ProjectConfigurations1 = '  </ItemGroup>'
-    # configuration, platform
-    ConfigurationT = '\n'.join([
-            '    <ProjectConfiguration Include="{0}|{1}">',
-            '      <Configuration>{0}</Configuration>',
-            '      <Platform>{1}</Platform>',
-            '    </ProjectConfiguration>'])
-    # project name, project uuid
-    GlobalsT = '\n'.join([
-            '  <PropertyGroup Label="Globals">',
-            '    <ProjectGuid>{{{1}}}</ProjectGuid>',
-            '    <RootNamespace>{0}</RootNamespace>',
-            '  </PropertyGroup>'])
-    # configuration, platform, debug
-    PropertyT = '\n'.join([
-            '  <PropertyGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'" Label="Configuration">',
-            '    <ConfigurationType>Application</ConfigurationType>',
-            '    <UseDebugLibraries>{2}</UseDebugLibraries>',
-            '    <PlatformToolset>{3}</PlatformToolset>',
-            '    <CharacterSet>MultiByte</CharacterSet>',
-            '  </PropertyGroup>'])
-    # configuration, platform
-    ItemDefenitionDebugT = '\n'.join([
-        '  <ItemDefinitionGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'">',
-        '    <ClCompile>',
-        '      <WarningLevel>Level3</WarningLevel>',
-        '      <Optimization>Disabled</Optimization>',
-        '      <SDLCheck>true</SDLCheck>',
-        '      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>',
-        '    </ClCompile>',
-        '    <Link>',
-        '      <GenerateDebugInformation>true</GenerateDebugInformation>',
-        '    </Link>',
-        '  </ItemDefinitionGroup>'])
-    # configuration, platform
-    ItemDefenitionReleaseT = '\n'.join([
-        '  <ItemDefinitionGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'">',
-        '    <ClCompile>',
-        '      <WarningLevel>Level3</WarningLevel>',
-        '      <Optimization>MaxSpeed</Optimization>',
-        '      <FunctionLevelLinking>true</FunctionLevelLinking>',
-        '      <IntrinsicFunctions>true</IntrinsicFunctions>',
-        '      <SDLCheck>true</SDLCheck>',
-        '      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>',
-        '    </ClCompile>',
-        '    <Link>',
-        '      <GenerateDebugInformation>true</GenerateDebugInformation>',
-        '      <EnableCOMDATFolding>true</EnableCOMDATFolding>',
-        '      <OptimizeReferences>true</OptimizeReferences>',
-        '    </Link>',
-        '  </ItemDefinitionGroup>'])
-    ItemGroup0 = '  <ItemGroup>'
-    ItemGroup1 = '  </ItemGroup>'
-    # path
-    IncludesT = '    <ClInclude Include="{0}" />'
-    # path
-    SourcesT = '    <ClCompile Include="{0}" />'
-    # path
-    NonesT   = '    <None Include="{0}" />'
+  Header = '<?xml version="1.0" encoding="utf-8"?>'
+  Project0 = '<Project DefaultTargets="Build" ToolsVersion="{}.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'.format(Toolset())
+  Project1 = '</Project>'
+  ProjectConfigurations0 = '  <ItemGroup Label="ProjectConfigurations">'
+  ProjectConfigurations1 = '  </ItemGroup>'
+  # configuration, platform
+  ConfigurationT = '\n'.join([
+          '    <ProjectConfiguration Include="{0}|{1}">',
+          '      <Configuration>{0}</Configuration>',
+          '      <Platform>{1}</Platform>',
+          '    </ProjectConfiguration>'])
+  # project name, project uuid
+  GlobalsT = '\n'.join([
+          '  <PropertyGroup Label="Globals">',
+          '    <ProjectGuid>{{{1}}}</ProjectGuid>',
+          '    <RootNamespace>{0}</RootNamespace>',
+          '  </PropertyGroup>'])
+  # configuration, platform, debug
+  PropertyT = '\n'.join([
+          '  <PropertyGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'" Label="Configuration">',
+          '    <ConfigurationType>Application</ConfigurationType>',
+          '    <UseDebugLibraries>{2}</UseDebugLibraries>',
+          '    <PlatformToolset>{3}</PlatformToolset>',
+          '    <CharacterSet>MultiByte</CharacterSet>',
+          '  </PropertyGroup>'])
+  # configuration, platform
+  ItemDefenitionDebugT = '\n'.join([
+      '  <ItemDefinitionGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'">',
+      '    <ClCompile>',
+      '      <WarningLevel>Level3</WarningLevel>',
+      '      <Optimization>Disabled</Optimization>',
+      '      <SDLCheck>true</SDLCheck>',
+      '      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>',
+      '    </ClCompile>',
+      '    <Link>',
+      '      <GenerateDebugInformation>true</GenerateDebugInformation>',
+      '    </Link>',
+      '  </ItemDefinitionGroup>'])
+  # configuration, platform
+  ItemDefenitionReleaseT = '\n'.join([
+      '  <ItemDefinitionGroup Condition="\'$(Configuration)|$(Platform)\'==\'{0}|{1}\'">',
+      '    <ClCompile>',
+      '      <WarningLevel>Level3</WarningLevel>',
+      '      <Optimization>MaxSpeed</Optimization>',
+      '      <FunctionLevelLinking>true</FunctionLevelLinking>',
+      '      <IntrinsicFunctions>true</IntrinsicFunctions>',
+      '      <SDLCheck>true</SDLCheck>',
+      '      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>',
+      '    </ClCompile>',
+      '    <Link>',
+      '      <GenerateDebugInformation>true</GenerateDebugInformation>',
+      '      <EnableCOMDATFolding>true</EnableCOMDATFolding>',
+      '      <OptimizeReferences>true</OptimizeReferences>',
+      '    </Link>',
+      '  </ItemDefinitionGroup>'])
+  ItemGroup0 = '  <ItemGroup>'
+  ItemGroup1 = '  </ItemGroup>'
+  # Header files path
+  IncludesT = '    <ClInclude Include="{0}" />'
+  # Source files path
+  SourcesT = '    <ClCompile Include="{0}" />'
+  # None files path
+  NonesT   = '    <None Include="{0}" />'
 
+  ImportTargets = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />'
+  ImportProps   = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />'
+  ImportDefaultProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />'
 
-    ImportTargets = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />'
-    ImportProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />'
-    ImportDefaultProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />'
+  @staticmethod
+  def Configuration(configuration, platform):
+    return Vcxproj.ConfigurationT.format(configuration, platform)
 
-    @staticmethod
-    def Configuration(configuration, platform):
-        return Vcxproj.ConfigurationT.format(configuration, platform)
+  @staticmethod
+  def Globals(name):
+    uid = GenerateID(name)
+    return Vcxproj.GlobalsT.format(name, uid)
 
-    @staticmethod
-    def Globals(name):
-        uid = GenerateID(name)
-        return Vcxproj.GlobalsT.format(name, uid)
+  @staticmethod
+  def Property(configuration, platform, ToolVer):
+    debug = 'false'
+    if IsDebug(configuration) : debug = 'true'
+    return Vcxproj.PropertyT.format(configuration, platform, debug, ToolVer)
 
-    @staticmethod
-    def Property(configuration, platform, ToolVer):
-        debug = 'false'
-        if IsDebug(configuration) : debug = 'true'
-        return Vcxproj.PropertyT.format(configuration, platform, debug, ToolVer)
+  @staticmethod
+  def ItemDefenition(configuration, platform):
+    defenition = Vcxproj.ItemDefenitionReleaseT
+    if IsDebug(configuration): defenition = Vcxproj.ItemDefenitionDebugT
+    return defenition.format(configuration, platform)
 
-    @staticmethod
-    def ItemDefenition(configuration, platform):
-        defenition = Vcxproj.ItemDefenitionReleaseT
-        if IsDebug(configuration): defenition = Vcxproj.ItemDefenitionDebugT
-        return defenition.format(configuration, platform)
+  @staticmethod
+  def Includes(name):
+    return Vcxproj.IncludesT.format(name)
 
-    @staticmethod
-    def Includes(name):
-        return Vcxproj.IncludesT.format(name)
-    @staticmethod
-    def Sources(name):
-        return Vcxproj.SourcesT.format(name)
-    @staticmethod
-    def Nones(name):
-        return Vcxproj.NonesT.format(name)
+  @staticmethod
+  def Sources(name):
+    return Vcxproj.SourcesT.format(name)
+
+  @staticmethod
+  def Nones(name):
+    return Vcxproj.NonesT.format(name)
 
 #-------------------------------------------------------------------------------
 # --- Filters class
 #-------------------------------------------------------------------------------
 class Filters:
-    Header = '<?xml version="1.0" encoding="utf-8"?>'
-    Project0 = '<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'
-    Project1 = '</Project>'
-    ItemGroup0 = '  <ItemGroup>'
-    ItemGroup1 = '  </ItemGroup>'
-    # path, folder
-    SourcesT = '\n'.join([
-        '    <ClCompile Include="{0}">',
-        '      <Filter>{1}</Filter>',
-        '    </ClCompile>'])
-    # path, folder
-    NonesT = '\n'.join([
-        '    <None Include="{0}">',
-        '      <Filter>{1}</Filter>',
-        '    </None>'])
-    # path, folder
-    IncludesT = '\n'.join([
-        '    <ClInclude Include="{0}">',
-        '      <Filter>{1}</Filter>',
-        '    </ClInclude>'])
-    # folder, uuid
-    FoldersT = '\n'.join([
-        '    <Filter Include="{0}">',
-        '      <UniqueIdentifier>{{{1}}}</UniqueIdentifier>',
-        '    </Filter>'])
+  Header = '<?xml version="1.0" encoding="utf-8"?>'
+  Project0 = '<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'
+  Project1 = '</Project>'
+  ItemGroup0 = '  <ItemGroup>'
+  ItemGroup1 = '  </ItemGroup>'
+  # path, folder
+  SourcesT = '\n'.join([
+      '    <ClCompile Include="{0}">',
+      '      <Filter>{1}</Filter>',
+      '    </ClCompile>'])
+  # path, folder
+  NonesT = '\n'.join([
+      '    <None Include="{0}">',
+      '      <Filter>{1}</Filter>',
+      '    </None>'])
+  # path, folder
+  IncludesT = '\n'.join([
+      '    <ClInclude Include="{0}">',
+      '      <Filter>{1}</Filter>',
+      '    </ClInclude>'])
+  # folder, uuid
+  FoldersT = '\n'.join([
+      '    <Filter Include="{0}">',
+      '      <UniqueIdentifier>{{{1}}}</UniqueIdentifier>',
+      '    </Filter>'])
 
-    @staticmethod
-    def Nones(path):
-        folder = FilterFromPath(path)
-        return Filters.NonesT.format(path, folder)
-    @staticmethod
-    def Sources(path):
-        folder = FilterFromPath(path)
-        return Filters.SourcesT.format(path, folder)
-    @staticmethod
-    def Includes(path):
-        folder = FilterFromPath(path)
-        return Filters.IncludesT.format(path, folder)
-    @staticmethod
-    def Folders(folder):
-        uid = GenerateID(folder)
-        return Filters.FoldersT.format(folder, uid)
+  @staticmethod
+  def Nones(path):
+    folder = FilterFromPath(path)
+    return Filters.NonesT.format(path, folder)
+
+  @staticmethod
+  def Sources(path):
+    folder = FilterFromPath(path)
+    return Filters.SourcesT.format(path, folder)
+
+  @staticmethod
+  def Includes(path):
+    folder = FilterFromPath(path)
+    return Filters.IncludesT.format(path, folder)
+
+  @staticmethod
+  def Folders(folder):
+    uid = GenerateID(folder)
+    return Filters.FoldersT.format(folder, uid)
 
 #-------------------------------------------------------------------------------
 # --- Generator class
 #-------------------------------------------------------------------------------
 class Generator:
-    Folders        = set()
-    Includes       = set()
-    Sources        = set()
-    Nones          = set()
-    Platforms      = set()
-    Configurations = set()
-    ToolVersion    = set()
-    Name           = ''
+  Folders        = set()
+  Includes       = set()
+  Sources        = set()
+  Nones          = set()
+  Platforms      = set()
+  Configurations = set()
+  ToolVersion    = set()
+  Name           = ''
 
-    def __init__(self, ProjectName, AllVarList, VSVersion):
-      self.Name = ProjectName
-      self.GetProjectConfig(AllVarList)
-      self.ToolVersion = self.GetToolSetVer(VSVersion)
+  def __init__(self, ProjectName, AllVarList, VSVersion):
+    self.Name = ProjectName
+    self.GetProjectConfig(AllVarList)
+    self.ToolVersion = self.GetToolSetVer(VSVersion)
 
-    def GetProjectConfig(self, AllVarList):
-      self.Configurations.clear()
-      self.Platforms.clear()
+  def GetProjectConfig(self, AllVarList):
+    self.Configurations.clear()
+    self.Platforms.clear()
 
-      if (AllVarList[0].get() != 0 and AllVarList[1].get() == 0):
-        self.Configurations = ['Release']
-      if (AllVarList[0].get() == 0 and AllVarList[1].get() != 0):
-        self.Configurations = ['Debug']
-      if (AllVarList[0].get() != 0 and AllVarList[1].get() != 0):
-        self.Configurations = ['Release', 'Debug']
-      if (AllVarList[2].get() != 0 and AllVarList[3].get() == 0):
-        self.Platforms = ['Win32']
-      if (AllVarList[2].get() == 0 and AllVarList[3].get() != 0):
-        self.Platforms = ['x64']
-      if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0):
-        self.Platforms = ['x64', 'Win32']
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() == 0):
+      self.Configurations = ['Release']
+    if (AllVarList[0].get() == 0 and AllVarList[1].get() != 0):
+      self.Configurations = ['Debug']
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() != 0):
+      self.Configurations = ['Release', 'Debug']
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() == 0):
+      self.Platforms = ['Win32']
+    if (AllVarList[2].get() == 0 and AllVarList[3].get() != 0):
+      self.Platforms = ['x64']
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0):
+      self.Platforms = ['x64', 'Win32']
 
-    def GetToolSetVer(self, ToolVer):
-      if ToolVer == 0:
-        LocalToolVer = 'v141'
-      if ToolVer == 1:
-        LocalToolVer = 'v142'
-      if ToolVer == 2:
-        LocalToolVer = 'v143'
+  def GetToolSetVer(self, ToolVer):
+    if ToolVer == 0:
+      LocalToolVer = 'v141'
+    if ToolVer == 1:
+      LocalToolVer = 'v142'
+    if ToolVer == 2:
+      LocalToolVer = 'v143'
+    return LocalToolVer
 
-      return LocalToolVer
+  def AddFolder(self, path):
+    filt = FilterFromPath(path)
+    if filt == '':
+      return
+    if filt not in self.Folders:
+      self.Folders.add(filt)
+      filters = ''
+      for f in os.path.split(filt):
+        filters = os.path.join(filters, f)
+        if filters != '':
+          self.Folders.add(filters)
 
-    def AddFolder(self, path):
-      filt = FilterFromPath(path)
-      if filt == '':
-          return
-      if filt not in self.Folders:
-          self.Folders.add(filt)
-          filters = ''
-          for f in os.path.split(filt):
-              filters = os.path.join(filters, f)
-              if filters != '':
-                  self.Folders.add(filters)
+  def AddSource(self, Filename):
+    LocalDir = "".join(( ".\\", Filename))
+    self.Sources.add(str(LocalDir))
 
-    def AddSource(self, Filename):
-        LocalDir = "".join(( ".\\", Filename))
-        self.Sources.add(str(LocalDir))
+  def AddNone(self, Filename):
+    LocalDir = "".join(( ".\\", Filename))
+    self.Nones.add(str(LocalDir))
 
-    def AddNone(self, Filename):
-        LocalDir = "".join(( ".\\", Filename))
-        self.Nones.add(str(LocalDir))
+  def AddHeader(self, Filename):
+    LocalDir = "".join(( ".\\", Filename))
+    self.Includes.add(str(LocalDir))
 
-    def AddHeader(self, Filename):
-        LocalDir = "".join(( ".\\", Filename))
-        self.Includes.add(str(LocalDir))
+  def RemoveRelativPath(self, Dir, RootDir):
+    RootDir = "".join((RootDir, "\\"))
+    LocalDir = Dir.replace(RootDir, "")
+    return LocalDir
 
-    def RemoveRelativPath(self, Dir, RootDir):
-        RootDir = "".join((RootDir, "\\"))
-        LocalDir = Dir.replace(RootDir, "")
-        return LocalDir
+  def AddFile(self, Dir, RootDir):
+    LocalDir = self.RemoveRelativPath(Dir, RootDir)
+    (root, ext) = os.path.splitext(Dir)
+    if ext in HEADER_EXT:
+        self.AddHeader(str(LocalDir))
+    elif ext in SOURCE_EXT:
+        self.AddSource(str(LocalDir))
+    elif ext in NONE_EXT:
+        self.AddNone(str(LocalDir))
+    else:
+        return
+    self.AddFolder(str(LocalDir))
 
-    def AddFile(self, Dir, RootDir):
-        LocalDir = self.RemoveRelativPath(Dir, RootDir)
-        (root, ext) = os.path.splitext(Dir)
-        if ext in HEADER_EXT:
-            self.AddHeader(str(LocalDir))
-        elif ext in SOURCE_EXT:
-            self.AddSource(str(LocalDir))
-        elif ext in NONE_EXT:
-            self.AddNone(str(LocalDir))
-        else:
-            return
-        self.AddFolder(str(LocalDir))
+  def Walk(self,Dir, RootDir):
+    if os.path.isfile(Dir):
+      self.AddFile(Dir, RootDir)
+    else:
+      for subPath in os.listdir(Dir):
+        self.Walk(os.path.join(Dir, subPath), RootDir)
 
-    def Walk(self,Dir, RootDir):
-        if os.path.isfile(Dir):
-            self.AddFile(Dir, RootDir)
-        else:
-            for subPath in os.listdir(Dir):
-                self.Walk(os.path.join(Dir, subPath), RootDir)
+  def CreateProject(self):
+    project = []
+    project.append(Vcxproj.Header)
+    project.append(Vcxproj.Project0)
 
-    def CreateProject(self):
-        project = []
-        project.append(Vcxproj.Header)
-        project.append(Vcxproj.Project0)
+    project.append(Vcxproj.ProjectConfigurations0)
+    for c in self.Configurations:
+        for p in self.Platforms:
+            project.append(Vcxproj.Configuration(c, p))
+    project.append(Vcxproj.ProjectConfigurations1)
 
-        project.append(Vcxproj.ProjectConfigurations0)
-        for c in self.Configurations:
-            for p in self.Platforms:
-                project.append(Vcxproj.Configuration(c, p))
-        project.append(Vcxproj.ProjectConfigurations1)
+    project.append(Vcxproj.Globals(self.Name))
 
-        project.append(Vcxproj.Globals(self.Name))
+    project.append(Vcxproj.ImportDefaultProps)
 
-        project.append(Vcxproj.ImportDefaultProps)
+    for c in self.Configurations:
+        for p in self.Platforms:
+            project.append(Vcxproj.Property(c, p, self.ToolVersion))
 
-        for c in self.Configurations:
-            for p in self.Platforms:
-                project.append(Vcxproj.Property(c, p, self.ToolVersion))
+    project.append(Vcxproj.ImportProps)
 
-        project.append(Vcxproj.ImportProps)
+    for c in self.Configurations:
+        for p in self.Platforms:
+            project.append(Vcxproj.ItemDefenition(c, p))
 
-        for c in self.Configurations:
-            for p in self.Platforms:
-                project.append(Vcxproj.ItemDefenition(c, p))
+    project.append(Vcxproj.ItemGroup0)
+    for f in self.Includes:
+        project.append(Vcxproj.Includes(f))
+    project.append(Vcxproj.ItemGroup1)
 
-        project.append(Vcxproj.ItemGroup0)
-        for f in self.Includes:
-            project.append(Vcxproj.Includes(f))
-        project.append(Vcxproj.ItemGroup1)
+    project.append(Vcxproj.ItemGroup0)
+    for f in self.Sources:
+        project.append(Vcxproj.Sources(f))
+    project.append(Vcxproj.ItemGroup1)
 
-        project.append(Vcxproj.ItemGroup0)
-        for f in self.Sources:
-            project.append(Vcxproj.Sources(f))
-        project.append(Vcxproj.ItemGroup1)
-        project.append(Vcxproj.ImportTargets)
+    project.append(Vcxproj.ItemGroup0)
+    for f in self.Nones:
+        project.append(Vcxproj.Nones(f))
+    project.append(Vcxproj.ItemGroup1)
+    project.append(Vcxproj.ImportTargets)
 
-        project.append(Vcxproj.ItemGroup0)
-        for f in self.Nones:
-            project.append(Vcxproj.Nones(f))
-        project.append(Vcxproj.ItemGroup1)
-        project.append(Vcxproj.ImportTargets)
+    project.append(Vcxproj.Project1)
+    return '\n'.join(project)
 
-        project.append(Vcxproj.Project1)
-        return '\n'.join(project)
+  def CreateFilters(self):
+    project = []
+    project.append(Filters.Header)
+    project.append(Filters.Project0)
 
-    def CreateFilters(self):
-        project = []
-        project.append(Filters.Header)
-        project.append(Filters.Project0)
+    project.append(Filters.ItemGroup0)
+    for f in self.Folders:
+      project.append(Filters.Folders(f))
+    project.append(Filters.ItemGroup1)
 
-        project.append(Filters.ItemGroup0)
-        for f in self.Folders:
-            project.append(Filters.Folders(f))
-        project.append(Filters.ItemGroup1)
+    project.append(Filters.ItemGroup0)
+    for f in self.Nones:
+      project.append(Filters.Nones(f))
+    project.append(Filters.ItemGroup1)
 
-        project.append(Filters.ItemGroup0)
-        for f in self.Nones:
-            project.append(Filters.Nones(f))
-        project.append(Filters.ItemGroup1)
+    project.append(Filters.ItemGroup0)
+    for f in self.Includes:
+      project.append(Filters.Includes(f))
+    project.append(Filters.ItemGroup1)
 
-        project.append(Filters.ItemGroup0)
-        for f in self.Includes:
-            project.append(Filters.Includes(f))
-        project.append(Filters.ItemGroup1)
+    project.append(Filters.ItemGroup0)
+    for f in self.Sources:
+      project.append(Filters.Sources(f))
+    project.append(Filters.ItemGroup1)
 
-        project.append(Filters.ItemGroup0)
-        for f in self.Sources:
-            project.append(Filters.Sources(f))
-        project.append(Filters.ItemGroup1)
+    project.append(Filters.Project1)
+    return '\n'.join(project)
 
-        project.append(Filters.Project1)
-        return '\n'.join(project)
+  def Generate(self):
+    # Check if old MSVC files exists and delete them
+    if os.path.exists(self.Name + '.vcxproj'):
+      os.remove(self.Name + '.vcxproj')
+    if os.path.exists(self.Name + '.vcxproj.filters'):
+      os.remove(self.Name + '.vcxproj.filters')
 
-    def Generate(self):
-        # Check if old MSVC files exists and delete them
-        if os.path.exists(self.Name + '.vcxproj'):
-           os.remove(self.Name + '.vcxproj')
-        if os.path.exists(self.Name + '.vcxproj.filters'):
-           os.remove(self.Name + '.vcxproj.filters')
+    # Create new MSVC files
+    f = open(self.Name + '.vcxproj', 'w')
+    f.write(self.CreateProject())
+    f.close()
 
-        # Create new MSVC files
-        f = open(self.Name + '.vcxproj', 'w')
-        f.write(self.CreateProject())
-        f.close()
+    f = open(self.Name + '.vcxproj.filters', 'w')
+    f.write(self.CreateFilters())
+    f.close()
 
-        f = open(self.Name + '.vcxproj.filters', 'w')
-        f.write(self.CreateFilters())
-        f.close()
+     # print("--- Source Files ---")
+     # for idx in self.Sources:
+     #   print(idx)
 
-       # print("--- Source Files ---")
-       # for idx in self.Sources:
-       #   print(idx)
+     # print("--- None Files ---")
+     # for idx in self.Nones:
+     #   print(idx)
 
-       # print("--- None Files ---")
-       # for idx in self.Nones:
-       #   print(idx)
-
-       # print("--- Header Files ---")
-       # for idx in self.Includes:
-       #   print(idx)
+     # print("--- Header Files ---")
+     # for idx in self.Includes:
+     #   print(idx)
 
 
 #-------------------------------------------------------------------------------
@@ -431,7 +430,8 @@ class GUI:
 
     if AllVarList[4].get() == 0:
       # show error message box
-      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: selected folder is either empty or invalid!")
+      tk.messagebox.showerror(title="Error",
+      message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
   def main_xx(self, WorkingDir, AllVarList, ToolVer):
     name = os.path.split(os.getcwd())[-1]
@@ -456,16 +456,20 @@ class GUI:
           self.main_xx(WorkingDir, AllVarList, ToolVer)
 
         else:
-          tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Project config are not selected!")
+          tk.messagebox.showerror(title="Error",
+          message=" Vcxproj-Generator: Project config are not selected!")
       else:
-        tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: MSVS is not selected!")
+        tk.messagebox.showerror(title="Error",
+        message=" Vcxproj-Generator: MSVS is not selected!")
     else:
-      tk.messagebox.showerror(title="Error", message=" Vcxproj-Generator: Folder is not selected or empty!")
+      tk.messagebox.showerror(title="Error",
+      message=" Vcxproj-Generator: Folder is not selected or empty!")
 
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList):
     # Create frame for MSVC config widgets
-    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',relief=GROOVE, bd='3')
+    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',
+                                    relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
     MsvcConfigFrame.place(x=20, y=20, height=220, width=950)
 
@@ -476,7 +480,8 @@ class GUI:
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, AllVarList), width=20)
+      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, AllVarList),
+      width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
 
     # Create a combobox for MSVC version
@@ -510,11 +515,13 @@ class GUI:
 
     for Idx in range(2):
       # Create project config labels
-      ProjectConfigLabel = Label(ProjectConfigFrame ,text=ProjectConfigList[Idx])
+      ProjectConfigLabel = Label(ProjectConfigFrame,
+                                 text=ProjectConfigList[Idx])
       ProjectConfigLabel.place(x=40, y=ProjectConfigYCordinate[Idx])
       ProjectConfigLabel.configure(font="times 10")
 
-      ProjectplatformLabel = Label(ProjectConfigFrame ,text=ProjectPlatformList[Idx])
+      ProjectplatformLabel = Label(ProjectConfigFrame,
+                                   text=ProjectPlatformList[Idx])
       ProjectplatformLabel.place(x=140, y=ProjectConfigYCordinate[Idx])
       ProjectplatformLabel.configure(font="times 10")
 
@@ -532,7 +539,8 @@ class GUI:
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
-    CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ", relief=GROOVE, bd='3')
+    CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ",
+                                  relief=GROOVE, bd='3')
     CmdLineWindow.configure(font="times 11 bold")
     CmdLineWindow.place(x=20, y=250, height=340, width=950)
 
