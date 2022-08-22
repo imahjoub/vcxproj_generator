@@ -469,7 +469,7 @@ class GUI:
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList):
     # Create frame for MSVC config widgets
     MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',
-                                    relief=GROOVE, bd='3')
+                      relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
     MsvcConfigFrame.place(x=20, y=20, height=220, width=950)
 
@@ -477,12 +477,14 @@ class GUI:
     WdEntryBox = Entry(MsvcConfigFrame, textvariable=WorkingDir)
     WdEntryBox.place(x=20, y=20, height=35, width=750)
     WdEntryBox.configure(font="times 11")
+    WdEntryBoxTip = Hovertip(WdEntryBox,'Working directory')
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-      command = lambda: GUI.GetAndCheckUserDir(WorkingDir, AllVarList),
-      width=20)
+                    command = lambda: GUI.GetAndCheckUserDir(WorkingDir,
+                    AllVarList), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
+    WdBrowsingBtNTip = Hovertip(WdBrowsingBtN,'Select your working directory')
 
     # Create a combobox for MSVC version
     MsvcVersion = Label(MsvcConfigFrame ,text="Visual Studio Version")
@@ -493,17 +495,20 @@ class GUI:
     CombBox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
     CombBox['values'] =('vs2017', 'vs2019', 'vs2022')
     CombBox.place(x=20, y=120, height=35, width=200)
+    CombBoxTip = Hovertip(CombBox,'Select your visual studio version')
 
     # Create "Generate vcxproj files" button
-    GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate vcxproj files",
-      command = lambda:
-        self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList), width=30)
+    GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
+                  command = lambda:
+                  self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList),
+                  width=30)
     GenerateBtN.place(x=700, y=100, height=60)
+    GenerateBtNTip = Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
     # Create a frame for Solution configurations and platform
     ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
-      text=" Solution configurations and platforms ",
-      relief=GROOVE, bd='2')
+                         text=" Solution configurations and platforms ",
+                         relief=GROOVE, bd='2')
     ProjectConfigFrame.configure(font="times 11 bold")
     ProjectConfigFrame.place(x=250, y=80, height=100, width=400)
 
@@ -528,14 +533,18 @@ class GUI:
 
       # Create project config checkbuttons
       ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-        variable= AllVarList[Idx],
-        onvalue=1, offvalue=0).place(x=20,
-        y=ProjectConfigYCordinate[Idx])
+                              variable= AllVarList[Idx],
+                              onvalue=1, offvalue=0).place(x=20,
+                              y=ProjectConfigYCordinate[Idx])
+      #ProjectConfigBtnTip   = Hovertip(ProjectConfigCheckBtn, ProjectConfigYCordinate[Idx])
+
 
       ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-        variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
-        onvalue=1, offvalue=0).place(x=120,
-        y=ProjectConfigYCordinate[Idx])
+                                variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
+                                onvalue=1, offvalue=0).place(x=120,
+                                y=ProjectConfigYCordinate[Idx])
+      #ProjectplatformBtnTip = Hovertip(ProjectplatformCheckBtn, ProjectConfigYCordinate[Idx])
+
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
