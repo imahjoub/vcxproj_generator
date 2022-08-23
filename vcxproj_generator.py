@@ -261,16 +261,16 @@ class Generator:
     return LocalToolVer
 
   def AddFolder(self, path):
-    filt = FilterFromPath(path)
-    if filt == '':
+    LocalFilter = FilterFromPath(path)
+    if LocalFilter == '':
       return
-    if filt not in self.Folders:
-      self.Folders.add(filt)
-      filters = ''
-      for f in os.path.split(filt):
-        filters = os.path.join(filters, f)
-        if filters != '':
-          self.Folders.add(filters)
+    if LocalFilter not in self.Folders:
+      self.Folders.add(LocalFilter)
+      MyFilters = ''
+      for Iter in os.path.split(LocalFilter):
+        MyFilters = os.path.join(MyFilters, Iter)
+        if MyFilters != '':
+          self.Folders.add(MyFilters)
 
   def AddSource(self, Filename):
     LocalDir = "".join(( ".\\", Filename))
@@ -315,38 +315,38 @@ class Generator:
     project.append(Vcxproj.Project0)
 
     project.append(Vcxproj.ProjectConfigurations0)
-    for c in self.Configurations:
-        for p in self.Platforms:
-            project.append(Vcxproj.Configuration(c, p))
+    for Iter_1 in self.Configurations:
+      for Iter_2 in self.Platforms:
+        project.append(Vcxproj.Configuration(Iter_1, Iter_2))
     project.append(Vcxproj.ProjectConfigurations1)
 
     project.append(Vcxproj.Globals(self.Name))
 
     project.append(Vcxproj.ImportDefaultProps)
 
-    for c in self.Configurations:
-        for p in self.Platforms:
-            project.append(Vcxproj.Property(c, p, self.ToolVersion))
+    for Iter_1 in self.Configurations:
+      for Iter_2 in self.Platforms:
+        project.append(Vcxproj.Property(Iter_1, Iter_2, self.ToolVersion))
 
     project.append(Vcxproj.ImportProps)
 
-    for c in self.Configurations:
-        for p in self.Platforms:
-            project.append(Vcxproj.ItemDefenition(c, p))
+    for Iter_1 in self.Configurations:
+      for Iter_2 in self.Platforms:
+        project.append(Vcxproj.ItemDefenition(Iter_1, Iter_2))
 
     project.append(Vcxproj.ItemGroup0)
-    for f in self.Includes:
-        project.append(Vcxproj.Includes(f))
+    for MyFile in self.Includes:
+      project.append(Vcxproj.Includes(MyFile))
     project.append(Vcxproj.ItemGroup1)
 
     project.append(Vcxproj.ItemGroup0)
-    for f in self.Sources:
-        project.append(Vcxproj.Sources(f))
+    for MyFile in self.Sources:
+      project.append(Vcxproj.Sources(MyFile))
     project.append(Vcxproj.ItemGroup1)
 
     project.append(Vcxproj.ItemGroup0)
-    for f in self.Nones:
-        project.append(Vcxproj.Nones(f))
+    for MyFile in self.Nones:
+      project.append(Vcxproj.Nones(MyFile))
     project.append(Vcxproj.ItemGroup1)
     project.append(Vcxproj.ImportTargets)
 
@@ -359,23 +359,23 @@ class Generator:
     project.append(Filters.Project0)
 
     project.append(Filters.ItemGroup0)
-    for f in self.Folders:
-      project.append(Filters.Folders(f))
+    for MyFolder in self.Folders:
+      project.append(Filters.Folders(MyFolder))
     project.append(Filters.ItemGroup1)
 
     project.append(Filters.ItemGroup0)
-    for f in self.Nones:
-      project.append(Filters.Nones(f))
+    for MyFile in self.Nones:
+      project.append(Filters.Nones(MyFile))
     project.append(Filters.ItemGroup1)
 
     project.append(Filters.ItemGroup0)
-    for f in self.Includes:
-      project.append(Filters.Includes(f))
+    for MyFile in self.Includes:
+      project.append(Filters.Includes(MyFile))
     project.append(Filters.ItemGroup1)
 
     project.append(Filters.ItemGroup0)
-    for f in self.Sources:
-      project.append(Filters.Sources(f))
+    for MyFile in self.Sources:
+      project.append(Filters.Sources(MyFile))
     project.append(Filters.ItemGroup1)
 
     project.append(Filters.Project1)
