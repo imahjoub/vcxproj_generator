@@ -47,10 +47,10 @@ def Toolset():
   VsVersion = '15.0'
   return VsVersion
 
-def GenerateUniqueID(name):
-  return str(uuid.uuid3(uuid.NAMESPACE_OID, name)).upper()
+def GenerateUniqueID(Name):
+  return str(uuid.uuid3(uuid.NAMESPACE_OID, Name)).upper()
 
-def IsDebug(configuration):
+def UseDebugLib(configuration):
   return 'debug' in configuration.lower()
 
 def FilterFromPath(path):
@@ -138,33 +138,33 @@ class Vcxproj:
     return Vcxproj.ConfigurationT.format(configuration, platform)
 
   @staticmethod
-  def Globals(name):
-    UniqueID = GenerateUniqueID(name)
-    return Vcxproj.GlobalsT.format(name, UniqueID)
+  def Globals(ProjectName):
+    UniqueID = GenerateUniqueID(ProjectName)
+    return Vcxproj.GlobalsT.format(ProjectName, UniqueID)
 
   @staticmethod
   def Property(configuration, platform, ToolVer):
     debug = 'false'
-    if IsDebug(configuration) : debug = 'true'
+    if UseDebugLib(configuration) : debug = 'true'
     return Vcxproj.PropertyT.format(configuration, platform, debug, ToolVer)
 
   @staticmethod
   def ItemDefenition(configuration, platform):
     defenition = Vcxproj.ItemDefenitionReleaseT
-    if IsDebug(configuration): defenition = Vcxproj.ItemDefenitionDebugT
+    if UseDebugLib(configuration): defenition = Vcxproj.ItemDefenitionDebugT
     return defenition.format(configuration, platform)
 
   @staticmethod
-  def Includes(name):
-    return Vcxproj.IncludesT.format(name)
+  def Includes(Filename):
+    return Vcxproj.IncludesT.format(Filename)
 
   @staticmethod
-  def Sources(name):
-    return Vcxproj.SourcesT.format(name)
+  def Sources(Filename):
+    return Vcxproj.SourcesT.format(Filename)
 
   @staticmethod
-  def Nones(name):
-    return Vcxproj.NonesT.format(name)
+  def Nones(Filename):
+    return Vcxproj.NonesT.format(Filename)
 
 #-------------------------------------------------------------------------------
 # --- Filters class
@@ -197,24 +197,24 @@ class Filters:
       '    </Filter>'])
 
   @staticmethod
-  def Nones(path):
-    folder = FilterFromPath(path)
-    return Filters.NonesT.format(path, folder)
+  def Nones(Path):
+    Filter = FilterFromPath(Path)
+    return Filters.NonesT.format(Path, Filter)
 
   @staticmethod
-  def Sources(path):
-    folder = FilterFromPath(path)
-    return Filters.SourcesT.format(path, folder)
+  def Sources(Path):
+    Filter = FilterFromPath(Path)
+    return Filters.SourcesT.format(Path, Filter)
 
   @staticmethod
-  def Includes(path):
-    folder = FilterFromPath(path)
-    return Filters.IncludesT.format(path, folder)
+  def Includes(Path):
+    Filter = FilterFromPath(Path)
+    return Filters.IncludesT.format(Path, Filter)
 
   @staticmethod
-  def Folders(folder):
-    uid = GenerateUniqueID(folder)
-    return Filters.FoldersT.format(folder, uid)
+  def Folders(FolderPath):
+    UniqueID = GenerateUniqueID(FolderPath)
+    return Filters.FoldersT.format(FolderPath, UniqueID)
 
 #-------------------------------------------------------------------------------
 # --- Generator class
