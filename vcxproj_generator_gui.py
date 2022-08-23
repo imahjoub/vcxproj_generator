@@ -33,7 +33,6 @@ root.resizable(0,0)
 #IconDir = current_dir + "\\xyz\\xyz.ico"
 #root.iconbitmap(IconDir)
 
-
 # --- Create a tab control
 TabControl = ttk.Notebook(root)
 TabControl.pack(expand=1, fill="both")
@@ -46,11 +45,6 @@ TabControl.add(MainTab, text="")
 WorkingDir    = StringVar()
 CurDirCount   = len(os.listdir(os.getcwd())) # check if curdir is empty
 WorkingDir.set(os.getcwd())
-
-# +++++++++++
-PATHS_TO_SEARCH = ['.']
-PROJECT_NAME    = '' # by default will use current directory name
-
 
 #-------------------------------------------------------------------------------
 # Global variables
