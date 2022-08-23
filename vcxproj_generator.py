@@ -31,6 +31,7 @@ from tkinter     import *
 from tkinter     import filedialog
 from tkinter.ttk import *
 from fnmatch     import fnmatch
+
 #-------------------------------------------------------------------------------
 # Global variables
 #-------------------------------------------------------------------------------
@@ -46,7 +47,7 @@ def Toolset():
   VsVersion = '15.0'
   return VsVersion
 
-def GenerateID(name):
+def GenerateUniqueID(name):
   return str(uuid.uuid3(uuid.NAMESPACE_OID, name)).upper()
 
 def IsDebug(configuration):
@@ -138,8 +139,8 @@ class Vcxproj:
 
   @staticmethod
   def Globals(name):
-    uid = GenerateID(name)
-    return Vcxproj.GlobalsT.format(name, uid)
+    UniqueID = GenerateUniqueID(name)
+    return Vcxproj.GlobalsT.format(name, UniqueID)
 
   @staticmethod
   def Property(configuration, platform, ToolVer):
@@ -212,7 +213,7 @@ class Filters:
 
   @staticmethod
   def Folders(folder):
-    uid = GenerateID(folder)
+    uid = GenerateUniqueID(folder)
     return Filters.FoldersT.format(folder, uid)
 
 #-------------------------------------------------------------------------------
