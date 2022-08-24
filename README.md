@@ -23,8 +23,8 @@ TBD
 3. run the vcxproj file
 
 ## Supported file extensions
-Source = [*.c, *.cpp]__
-Header = [*.h, *.hpp]__
+Source = [*.c, *.cpp] <br />
+Header = [*.h, *.hpp] <br />
 None   = [*.inl, *.ld, *.gmk]
 
 ###### If you need more extensions, you can add them yourself in `vcxproj_generator.py.`
