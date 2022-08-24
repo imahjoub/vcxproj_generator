@@ -14,8 +14,12 @@ Script will recursively search for the C++ files starting from the given directo
 All files found will be placed included in the project file.
 Also will generate .filters file to preserv folder structure within project.
 
+## Visual studio configuration
+TBD 
+
 ## How to use
 1. Download GUI
 2. set up your visual studio properities
 3. run the vcxproj file
 
+## Supported file extensions
