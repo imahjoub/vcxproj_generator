@@ -23,17 +23,14 @@ TBD
 3. run the vcxproj file
 
 ## Supported file extensions
-Source = [*.c, *.cpp] <br />
-Header = [*.h, *.hpp] <br />
-None   = [*.inl, *.ld, *.gmk]
-
-###### If you need more extensions, you can add them yourself in `vcxproj_generator.py.`
 
 ```
 HEADER_EXT = ['.h',  '.in', '.hpp']
 SOURCE_EXT = ['.c',  '.cc', '.cpp']
 NONE_EXT   = ['.md', '.ld', '.gmk']
 ```
+
+###### If you need more extensions, you can add them yourself in `vcxproj_generator.py.`
 
 ## SDK problem 8.1
 TBD describe visual studio error and how to update the sdk
