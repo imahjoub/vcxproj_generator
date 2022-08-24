@@ -35,16 +35,15 @@ from fnmatch     import fnmatch
 #-------------------------------------------------------------------------------
 # Global variables
 #-------------------------------------------------------------------------------
-HEADER_EXT = ['.h', '.inl', '.hpp']
-SOURCE_EXT = ['.c', '.cc', '.cpp']
-NONE_EXT   = ['.gmk', '.ld']
+HEADER_EXT = ['.h',  '.in', '.hpp']
+SOURCE_EXT = ['.c',  '.cc', '.cpp']
+NONE_EXT   = ['.md', '.ld', '.gmk']
 
 #-------------------------------------------------------------------------------
 # Global functions
 #-------------------------------------------------------------------------------
-def Toolset():
-  #defaults to vs2017
-  VsVersion = '15.0'
+def GetToolsetVersion():
+  VsVersion = '15.0' # TBD check which vs version is selected
   return VsVersion
 
 def GenerateUniqueID(Name):
@@ -53,20 +52,21 @@ def GenerateUniqueID(Name):
 def UseDebugLib(configuration):
   return 'debug' in configuration.lower()
 
-def FilterFromPath(path):
-  (head, tail) = os.path.split(path)
-  head = head.replace('/', '\\').replace('..\\', '').replace('.\\', '')
+def GetParentPath(Path):
+  (FilePath, Filename) = os.path.split(Path)
+  FilePath = FilePath.replace('/', '\\').replace('..\\', '').replace('.\\', '')
 
-  if head == '.':
+  if FilePath == '.':
     return ''
-  return head
+  else:
+    return FilePath
 
 #-------------------------------------------------------------------------------
 # --- Vcxproj class
 #-------------------------------------------------------------------------------
 class Vcxproj:
   Header = '<?xml version="1.0" encoding="utf-8"?>'
-  Project0 = '<Project DefaultTargets="Build" ToolsVersion="{}.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'.format(Toolset())
+  Project0 = '<Project DefaultTargets="Build" ToolsVersion="{}.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">'.format(GetToolsetVersion())
   Project1 = '</Project>'
   ProjectConfigurations0 = '  <ItemGroup Label="ProjectConfigurations">'
   ProjectConfigurations1 = '  </ItemGroup>'
@@ -198,17 +198,17 @@ class Filters:
 
   @staticmethod
   def Nones(Path):
-    Filter = FilterFromPath(Path)
+    Filter = GetParentPath(Path)
     return Filters.NonesT.format(Path, Filter)
 
   @staticmethod
   def Sources(Path):
-    Filter = FilterFromPath(Path)
+    Filter = GetParentPath(Path)
     return Filters.SourcesT.format(Path, Filter)
 
   @staticmethod
   def Includes(Path):
-    Filter = FilterFromPath(Path)
+    Filter = GetParentPath(Path)
     return Filters.IncludesT.format(Path, Filter)
 
   @staticmethod
@@ -261,7 +261,7 @@ class Generator:
     return LocalToolVer
 
   def AddFolder(self, path):
-    LocalFilter = FilterFromPath(path)
+    LocalFilter = GetParentPath(path)
     if LocalFilter == '':
       return
     if LocalFilter not in self.Folders:

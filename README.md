@@ -15,7 +15,7 @@ All files found will be placed included in the project file.
 Also will generate .filters file to preserv folder structure within project.
 
 ## Visual studio configuration
-TBD 
+TBD
 
 ## How to use
 1. Download GUI
@@ -23,3 +23,19 @@ TBD
 3. run the vcxproj file
 
 ## Supported file extensions
+Source = [*.c, *.cpp]
+Header = [*.h, *.hpp]
+None   = [*.inl, *.ld, *.gmk]
+
+###If you need more extensions, you can add them yourself in `vcxproj_generator.py.`
+
+```
+HEADER_EXT = ['.h',  '.in', '.hpp']
+SOURCE_EXT = ['.c',  '.cc', '.cpp']
+NONE_EXT   = ['.md', '.ld', '.gmk']
+```
+
+## SDK problem 8.1
+TBD describe visual studio error and how to update the sdk
+
+
