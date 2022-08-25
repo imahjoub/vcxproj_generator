@@ -25,13 +25,9 @@ root.title("Vcxproj-Generator version 1.0.1")
 # --- Deactivate the resize button (GUI window size)
 root.resizable(0,0)
 
-# --- GUI logo
-# TBD add a logo
-#LogoDir = current_dir + "\\xyz\\xyz.png"
-#Logo    = ImageTk.PhotoImage(file=LogoDir)
-
-#IconDir = current_dir + "\\xyz\\xyz.ico"
-#root.iconbitmap(IconDir)
+# --- Gui icone
+IconDir = ".\\vcxproj_icone.ico"
+root.iconbitmap(IconDir)
 
 # --- Create a tab control
 TabControl = ttk.Notebook(root)
