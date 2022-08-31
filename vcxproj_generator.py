@@ -426,8 +426,8 @@ class GUI:
   Platforms      = []
 
   def __init__(self, TabControl, WorkingDir, AllVarList):
-    self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList)
-    self.PrintCmdLineFrame(TabControl)
+    OutputText = self.PrintCmdLineFrame(TabControl)
+    self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList, OutputText)
 
   def GetAndCheckUserDir(self,WorkingDir, AllVarList):
     # help function for "select folder" button
@@ -442,24 +442,27 @@ class GUI:
       tk.messagebox.showerror(title="Error",
       message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
-  def PrintVcxprojGenOutput(self, MyObj):
-     LocalHeaderFiles = MyObj.GetHeaderFiles()
-     LocalSourceFiles = MyObj.GetSourceFiles()
-     LocalNoneFiles   = MyObj.GetNoneFiles()
+  def PrintVcxprojGenOutput(self, MyObj, OutputText):
+    LocalHeaderFiles = MyObj.GetHeaderFiles()
+    LocalSourceFiles = MyObj.GetSourceFiles()
+    LocalNoneFiles   = MyObj.GetNoneFiles()
 
-     print("--- Source Files ---")
-     for idx in LocalSourceFiles:
-       print(idx)
+    print("--- Source Files ---")
+    for idx in LocalSourceFiles:
+      print(idx)
 
-     print("--- None Files ---")
-     for idx in LocalNoneFiles:
-       print(idx)
+    print("--- None Files ---")
+    for idx in LocalNoneFiles:
+      print(idx)
 
-     print("--- Header Files ---")
-     for idx in LocalHeaderFiles:
-       print(idx)
+    print("--- Header Files ---")
+    for idx in LocalHeaderFiles:
+      print(idx)
 
-  def main_xx(self, WorkingDir, AllVarList, ToolVer):
+    my_text = "hello world"
+    OutputText.insert(END, my_text)
+
+  def main_xx(self, WorkingDir, AllVarList, ToolVer, OutputText):
     name = os.path.split(os.getcwd())[-1]
     generator = Generator(name,AllVarList, ToolVer)
 
@@ -469,9 +472,9 @@ class GUI:
         generator.Walk(Dir, RootDir)
     generator.Generate()
 
-    self.PrintVcxprojGenOutput(generator)
+    self.PrintVcxprojGenOutput(generator, OutputText)
 
-  def GenerateVcxprojFile(self, CombBox, WorkingDir, AllVarList):
+  def GenerateVcxprojFile(self, CombBox, WorkingDir, AllVarList, OutputText):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
     PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
     PathIsOk      =  AllVarList[4].get() != 0
@@ -481,7 +484,7 @@ class GUI:
       if MSVSVerIsOk == True:
         ToolVer = CombBox.current()
         if SlnConfigIsOk == True and PlatformIsOk == True:
-          self.main_xx(WorkingDir, AllVarList, ToolVer)
+          self.main_xx(WorkingDir, AllVarList, ToolVer, OutputText)
 
         else:
           tk.messagebox.showerror(title="Error",
@@ -494,7 +497,7 @@ class GUI:
       message=" Vcxproj-Generator: Folder is not selected or empty!")
 
 
-  def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList):
+  def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList, OutputText):
     # Create frame for MSVC config widgets
     MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',
                       relief=GROOVE, bd='3')
@@ -528,8 +531,8 @@ class GUI:
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
                   command = lambda:
-                  self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList),
-                  width=30)
+                  self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList,
+                  OutputText),width=30)
     GenerateBtN.place(x=700, y=100, height=60)
     GenerateBtNTip = Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
@@ -596,3 +599,5 @@ class GUI:
     # Assign the scrollbar with the text widget
     ScrollBar_H['command'] = OutputText.xview
     ScrollBar_V['command'] = OutputText.yview
+
+    return OutputText
