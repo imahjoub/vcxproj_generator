@@ -397,6 +397,14 @@ class Generator:
     f.write(self.CreateFilters())
     f.close()
 
+
+  def GetHeaderFiles(self):
+    return self.Includes
+  def GetSourceFiles(self):
+    return self.Sources
+  def GetNoneFiles(self):
+    return self.Nones
+
      # print("--- Source Files ---")
      # for idx in self.Sources:
      #   print(idx)
@@ -434,6 +442,23 @@ class GUI:
       tk.messagebox.showerror(title="Error",
       message=" Vcxproj-Generator: selected folder is either empty or invalid!")
 
+  def PrintVcxprojGenOutput(self, MyObj):
+     LocalHeaderFiles = MyObj.GetHeaderFiles()
+     LocalSourceFiles = MyObj.GetSourceFiles()
+     LocalNoneFiles   = MyObj.GetNoneFiles()
+
+     print("--- Source Files ---")
+     for idx in LocalSourceFiles:
+       print(idx)
+
+     print("--- None Files ---")
+     for idx in LocalNoneFiles:
+       print(idx)
+
+     print("--- Header Files ---")
+     for idx in LocalHeaderFiles:
+       print(idx)
+
   def main_xx(self, WorkingDir, AllVarList, ToolVer):
     name = os.path.split(os.getcwd())[-1]
     generator = Generator(name,AllVarList, ToolVer)
@@ -443,6 +468,8 @@ class GUI:
     for Dir in path_as_list:
         generator.Walk(Dir, RootDir)
     generator.Generate()
+
+    self.PrintVcxprojGenOutput(generator)
 
   def GenerateVcxprojFile(self, CombBox, WorkingDir, AllVarList):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
