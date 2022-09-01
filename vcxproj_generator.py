@@ -447,22 +447,24 @@ class GUI:
     LocalSourceFiles = MyObj.GetSourceFiles()
     LocalNoneFiles   = MyObj.GetNoneFiles()
 
-    print("--- Source Files ---")
-    for idx in LocalSourceFiles:
-      print(idx)
+    OutputText.insert(END, "vcxproj-genrator report: \n")
 
-    print("--- None Files ---")
-    for idx in LocalNoneFiles:
-      print(idx)
+    OutputText.insert(END, "--- Source Files --- \n")
+    for File in LocalSourceFiles:
+      OutputText.insert(END, File)
 
-    print("--- Header Files ---")
-    for idx in LocalHeaderFiles:
-      print(idx)
+    OutputText.insert(END, "--- None Files --- \n")
+    for File in LocalNoneFiles:
+      OutputText.insert(END, File)
 
-    my_text = "hello world"
-    OutputText.insert(END, my_text)
+    OutputText.insert(END, "--- Header Files --- \n")
+    for File in LocalHeaderFiles:
+      OutputText.insert(END, File)
 
-  def main_xx(self, WorkingDir, AllVarList, ToolVer, OutputText):
+
+    my_text = "hello world\n"
+
+  def main_xx(self, GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText):
     name = os.path.split(os.getcwd())[-1]
     generator = Generator(name,AllVarList, ToolVer)
 
@@ -472,9 +474,14 @@ class GUI:
         generator.Walk(Dir, RootDir)
     generator.Generate()
 
+    # print the result of vcxproj-generator
     self.PrintVcxprojGenOutput(generator, OutputText)
 
-  def GenerateVcxprojFile(self, CombBox, WorkingDir, AllVarList, OutputText):
+    #release button again
+    GenerateBtN.configure(stat=NORMAL)
+
+  def GenerateVcxprojFile(self, GenerateBtN, CombBox, WorkingDir, AllVarList,
+                          OutputText):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
     PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
     PathIsOk      =  AllVarList[4].get() != 0
@@ -484,7 +491,9 @@ class GUI:
       if MSVSVerIsOk == True:
         ToolVer = CombBox.current()
         if SlnConfigIsOk == True and PlatformIsOk == True:
-          self.main_xx(WorkingDir, AllVarList, ToolVer, OutputText)
+          OutputText.insert(END, " Have patience program is running ... \n")
+          GenerateBtN.configure(stat=DISABLED)
+          self.main_xx(GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText)
 
         else:
           tk.messagebox.showerror(title="Error",
@@ -531,8 +540,8 @@ class GUI:
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
                   command = lambda:
-                  self.GenerateVcxprojFile(CombBox, WorkingDir, AllVarList,
-                  OutputText),width=30)
+                  self.GenerateVcxprojFile(GenerateBtN, CombBox, WorkingDir,
+                  AllVarList, OutputText),width=30)
     GenerateBtN.place(x=700, y=100, height=60)
     GenerateBtNTip = Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
