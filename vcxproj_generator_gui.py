@@ -26,7 +26,7 @@ root.title("Vcxproj-Generator version 1.0.1")
 root.resizable(0,0)
 
 # --- Gui icone
-IconDir = ".\\vcxproj_icone.ico"
+IconDir = ".\\vcxproj_generator.ico"
 root.iconbitmap(IconDir)
 
 # --- Create a tab control

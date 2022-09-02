@@ -37,7 +37,7 @@ from fnmatch     import fnmatch
 #-------------------------------------------------------------------------------
 HEADER_EXT = ['.h',  '.in', '.hpp']
 SOURCE_EXT = ['.c',  '.cc', '.cpp']
-NONE_EXT   = ['.md', '.ld', '.gmk']
+NONE_EXT   = ['.md', '.ld', '.gmk', 'yml']
 
 #-------------------------------------------------------------------------------
 # Global functions
@@ -492,8 +492,8 @@ class GUI:
         ToolVer = CombBox.current()
         if SlnConfigIsOk == True and PlatformIsOk == True:
           # clear and activate the text frame
-          OutputText.delete('1.0', END)
           OutputText.config(state=NORMAL)
+          OutputText.delete('1.0', END)
           OutputText.insert(END, "vcxproj-genrator is running ...\n")
           OutputText.config(state=DISABLED)
           GenerateBtN.configure(stat=DISABLED)
