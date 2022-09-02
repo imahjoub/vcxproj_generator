@@ -447,22 +447,22 @@ class GUI:
     LocalSourceFiles = MyObj.GetSourceFiles()
     LocalNoneFiles   = MyObj.GetNoneFiles()
 
-    OutputText.insert(END, "vcxproj-genrator report: \n")
+    OutputText.config(state=NORMAL)
 
-    OutputText.insert(END, "--- Source Files --- \n")
+    OutputText.insert(END, "\n---- Source Files ---- \n")
     for File in LocalSourceFiles:
-      OutputText.insert(END, File)
+      OutputText.insert(END, str(File+"\n"))
 
-    OutputText.insert(END, "--- None Files --- \n")
-    for File in LocalNoneFiles:
-      OutputText.insert(END, File)
-
-    OutputText.insert(END, "--- Header Files --- \n")
+    OutputText.insert(END, "\n--- Header Files --- \n")
     for File in LocalHeaderFiles:
-      OutputText.insert(END, File)
+      OutputText.insert(END, str(File+"\n"))
 
+    OutputText.insert(END, "\n---- None Files ---- \n")
+    for File in LocalNoneFiles:
+      OutputText.insert(END, str(File+"\n"))
 
-    my_text = "hello world\n"
+    OutputText.config(state=DISABLED)
+
 
   def main_xx(self, GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText):
     name = os.path.split(os.getcwd())[-1]
@@ -477,7 +477,7 @@ class GUI:
     # print the result of vcxproj-generator
     self.PrintVcxprojGenOutput(generator, OutputText)
 
-    #release button again
+    # Activate generate button
     GenerateBtN.configure(stat=NORMAL)
 
   def GenerateVcxprojFile(self, GenerateBtN, CombBox, WorkingDir, AllVarList,
@@ -491,7 +491,11 @@ class GUI:
       if MSVSVerIsOk == True:
         ToolVer = CombBox.current()
         if SlnConfigIsOk == True and PlatformIsOk == True:
-          OutputText.insert(END, " Have patience program is running ... \n")
+          # clear and activate the text frame
+          OutputText.delete('1.0', END)
+          OutputText.config(state=NORMAL)
+          OutputText.insert(END, "vcxproj-genrator is running ...\n")
+          OutputText.config(state=DISABLED)
           GenerateBtN.configure(stat=DISABLED)
           self.main_xx(GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText)
 
@@ -604,6 +608,8 @@ class GUI:
                          yscrollcommand = ScrollBar_V.set,
                          xscrollcommand = ScrollBar_H.set, wrap= NONE)
     OutputText.pack(fill=BOTH, expand=0)
+    OutputText.config(state=DISABLED)
+
 
     # Assign the scrollbar with the text widget
     ScrollBar_H['command'] = OutputText.xview
