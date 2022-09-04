@@ -33,5 +33,6 @@ NONE_EXT   = ['.md', '.ld', '.gmk']
 
 ## SDK problem 8.1
 TBD describe visual studio error and how to update the sdk
+also close visual studio and delete the sln file if the vcxproj is generated with other additional config
 
 

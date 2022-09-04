@@ -1,0 +1,1 @@
+pyinstaller --nowindow --noconsole --icon=vcxproj_generator.ico --onefile vcxproj_generator_gui.py
