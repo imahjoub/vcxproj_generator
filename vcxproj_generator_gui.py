@@ -14,6 +14,9 @@
 # import project files
 from vcxproj_generator import *
 
+#-------------------------------------------------------------------------------
+# Tkinter initialization
+#-------------------------------------------------------------------------------
 # --- Create the parent window (root)
 root = tkinter.Tk()
 root.geometry("1000x600")

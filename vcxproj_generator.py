@@ -134,8 +134,8 @@ class Vcxproj:
   ImportDefaultProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />'
 
   @staticmethod
-  def Configuration(configuration, platform):
-    return Vcxproj.ConfigurationT.format(configuration, platform)
+  def Configuration(Configuration, Platform):
+    return Vcxproj.ConfigurationT.format(Configuration, Platform)
 
   @staticmethod
   def Globals(ProjectName):
@@ -143,16 +143,16 @@ class Vcxproj:
     return Vcxproj.GlobalsT.format(ProjectName, UniqueID)
 
   @staticmethod
-  def Property(configuration, platform, ToolVer):
-    debug = 'false'
-    if UseDebugLib(configuration) : debug = 'true'
-    return Vcxproj.PropertyT.format(configuration, platform, debug, ToolVer)
+  def Property(Configuration, Platform, ToolVer):
+    Debug = 'false'
+    if UseDebugLib(Configuration) : Debug = 'true'
+    return Vcxproj.PropertyT.format(Configuration, Platform, Debug, ToolVer)
 
   @staticmethod
-  def ItemDefenition(configuration, platform):
+  def ItemDefenition(Configuration, Platform):
     defenition = Vcxproj.ItemDefenitionReleaseT
-    if UseDebugLib(configuration): defenition = Vcxproj.ItemDefenitionDebugT
-    return defenition.format(configuration, platform)
+    if UseDebugLib(Configuration): defenition = Vcxproj.ItemDefenitionDebugT
+    return defenition.format(Configuration, Platform)
 
   @staticmethod
   def Includes(Filename):
@@ -290,16 +290,16 @@ class Generator:
     return LocalDir
 
   def AddFile(self, Dir, RootDir):
-    LocalDir = self.RemoveRelativPath(Dir, RootDir)
+    LocalDir    = self.RemoveRelativPath(Dir, RootDir)
     (root, ext) = os.path.splitext(Dir)
     if ext in HEADER_EXT:
-        self.AddHeader(str(LocalDir))
+      self.AddHeader(str(LocalDir))
     elif ext in SOURCE_EXT:
-        self.AddSource(str(LocalDir))
+      self.AddSource(str(LocalDir))
     elif ext in NONE_EXT:
-        self.AddNone(str(LocalDir))
+      self.AddNone(str(LocalDir))
     else:
-        return
+      return
     self.AddFolder(str(LocalDir))
 
   def Walk(self,Dir, RootDir):
@@ -381,6 +381,13 @@ class Generator:
     project.append(Filters.Project1)
     return '\n'.join(project)
 
+  def GetHeaderFiles(self):
+    return self.Includes
+  def GetSourceFiles(self):
+    return self.Sources
+  def GetNoneFiles(self):
+    return self.Nones
+
   def Generate(self):
     # Check if old MSVC files exists and delete them
     if os.path.exists(self.Name + '.vcxproj'):
@@ -396,27 +403,6 @@ class Generator:
     f = open(self.Name + '.vcxproj.filters', 'w')
     f.write(self.CreateFilters())
     f.close()
-
-
-  def GetHeaderFiles(self):
-    return self.Includes
-  def GetSourceFiles(self):
-    return self.Sources
-  def GetNoneFiles(self):
-    return self.Nones
-
-     # print("--- Source Files ---")
-     # for idx in self.Sources:
-     #   print(idx)
-
-     # print("--- None Files ---")
-     # for idx in self.Nones:
-     #   print(idx)
-
-     # print("--- Header Files ---")
-     # for idx in self.Includes:
-     #   print(idx)
-
 
 #-------------------------------------------------------------------------------
 # --- GUI class
@@ -466,16 +452,16 @@ class GUI:
 
   def main_xx(self, GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText):
     name = os.path.split(os.getcwd())[-1]
-    generator = Generator(name,AllVarList, ToolVer)
+    LocalGen = Generator(name,AllVarList, ToolVer)
 
     RootDir = WorkingDir.get()
     path_as_list = list(RootDir.split(","))
     for Dir in path_as_list:
-        generator.Walk(Dir, RootDir)
-    generator.Generate()
+        LocalGen.Walk(Dir, RootDir)
+    LocalGen.Generate()
 
     # print the result of vcxproj-generator
-    self.PrintVcxprojGenOutput(generator, OutputText)
+    self.PrintVcxprojGenOutput(LocalGen, OutputText)
 
     # Activate generate button
     GenerateBtN.configure(stat=NORMAL)
@@ -525,8 +511,8 @@ class GUI:
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-                    command = lambda: GUI.GetAndCheckUserDir(WorkingDir,
-                    AllVarList), width=20)
+                    command = lambda: self.GetAndCheckUserDir(WorkingDir,
+                                      AllVarList), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
     WdBrowsingBtNTip = Hovertip(WdBrowsingBtN,'Select your working directory')
 
