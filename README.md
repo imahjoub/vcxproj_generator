@@ -9,9 +9,6 @@ vcxproj_generator
 
 A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a given path and its subfolders to generate the `*.vcxproj` and `*.vcxproj.filters` files.
 
-## Visual studio configuration
-TBD
-
 ## How to use
 1. Download GUI
 2. set up your visual studio properities
