@@ -1,4 +1,4 @@
-?vcxproj_generator
+vcxproj_generator
 =====================
 <p align="center">
     <a href="https://github.com/imahjoub/vcxproj-generator-gui/blob/main/LICENSE">
