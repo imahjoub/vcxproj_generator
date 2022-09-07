@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name     :   vcxproj_generator_gui
+# Name     :   run_vcxproj_generator
 #
 # Author   :   Iliass Mahjoub
 #
