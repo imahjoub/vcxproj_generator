@@ -1,4 +1,4 @@
-?vcxproj_generator
+vcxproj_generator
 =====================
 <p align="center">
     <a href="https://github.com/imahjoub/vcxproj-generator-gui/blob/main/LICENSE">
@@ -6,15 +6,8 @@
     <a href="https://github.com/imahjoub/vcxproj-generator-gui" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/y/imahjoub/vcxproj-generator-gui" /></a>
 </p>
-?
-A GUI that iteratively searches for files (*.h, *.c++, *.none, etc.) in a given path and its subfolders to generate the `*.vcxproj` and `*.vcxproj.filters` files.
 
-Script will recursively search for the C++ files starting from the given directory.
-All files found will be placed included in the project file.
-Also will generate .filters file to preserv folder structure within project.
-
-## Visual studio configuration
-TBD
+A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a given path and its subfolders to generate the `*.vcxproj` and `*.vcxproj.filters` files.
 
 ## How to use
 1. Download GUI
