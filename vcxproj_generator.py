@@ -15,7 +15,6 @@
 import uuid
 
 import os, sys
-import subprocess
 import re
 import threading
 import tkinter
@@ -49,8 +48,8 @@ def GetToolsetVersion():
 def GenerateUniqueID(Name):
   return str(uuid.uuid3(uuid.NAMESPACE_OID, Name)).upper()
 
-def UseDebugLib(configuration):
-  return 'debug' in configuration.lower()
+def UseDebugLib(Configuration):
+  return 'debug' in Configuration.lower()
 
 def GetParentPath(Path):
   (FilePath, Filename) = os.path.split(Path)
@@ -310,76 +309,76 @@ class Generator:
         self.Walk(os.path.join(Dir, subPath), RootDir)
 
   def CreateProject(self):
-    project = []
-    project.append(Vcxproj.Header)
-    project.append(Vcxproj.Project0)
+    Project = []
+    Project.append(Vcxproj.Header)
+    Project.append(Vcxproj.Project0)
 
-    project.append(Vcxproj.ProjectConfigurations0)
-    for Iter_1 in self.Configurations:
-      for Iter_2 in self.Platforms:
-        project.append(Vcxproj.Configuration(Iter_1, Iter_2))
-    project.append(Vcxproj.ProjectConfigurations1)
+    Project.append(Vcxproj.ProjectConfigurations0)
+    for MyConf in self.Configurations:
+      for MyPltform in self.Platforms:
+        Project.append(Vcxproj.Configuration(MyConf, MyPltform))
+    Project.append(Vcxproj.ProjectConfigurations1)
 
-    project.append(Vcxproj.Globals(self.Name))
+    Project.append(Vcxproj.Globals(self.Name))
 
-    project.append(Vcxproj.ImportDefaultProps)
+    Project.append(Vcxproj.ImportDefaultProps)
 
-    for Iter_1 in self.Configurations:
-      for Iter_2 in self.Platforms:
-        project.append(Vcxproj.Property(Iter_1, Iter_2, self.ToolVersion))
+    for MyConf in self.Configurations:
+      for MyPltform in self.Platforms:
+        Project.append(Vcxproj.Property(MyConf, MyPltform, self.ToolVersion))
 
-    project.append(Vcxproj.ImportProps)
+    Project.append(Vcxproj.ImportProps)
 
-    for Iter_1 in self.Configurations:
-      for Iter_2 in self.Platforms:
-        project.append(Vcxproj.ItemDefenition(Iter_1, Iter_2))
+    for MyConf in self.Configurations:
+      for MyPltform in self.Platforms:
+        Project.append(Vcxproj.ItemDefenition(MyConf, MyPltform))
 
-    project.append(Vcxproj.ItemGroup0)
+    Project.append(Vcxproj.ItemGroup0)
     for MyFile in self.Includes:
-      project.append(Vcxproj.Includes(MyFile))
-    project.append(Vcxproj.ItemGroup1)
+      Project.append(Vcxproj.Includes(MyFile))
+    Project.append(Vcxproj.ItemGroup1)
 
-    project.append(Vcxproj.ItemGroup0)
+    Project.append(Vcxproj.ItemGroup0)
     for MyFile in self.Sources:
-      project.append(Vcxproj.Sources(MyFile))
-    project.append(Vcxproj.ItemGroup1)
+      Project.append(Vcxproj.Sources(MyFile))
+    Project.append(Vcxproj.ItemGroup1)
 
-    project.append(Vcxproj.ItemGroup0)
+    Project.append(Vcxproj.ItemGroup0)
     for MyFile in self.Nones:
-      project.append(Vcxproj.Nones(MyFile))
-    project.append(Vcxproj.ItemGroup1)
-    project.append(Vcxproj.ImportTargets)
+      Project.append(Vcxproj.Nones(MyFile))
+    Project.append(Vcxproj.ItemGroup1)
+    Project.append(Vcxproj.ImportTargets)
 
-    project.append(Vcxproj.Project1)
-    return '\n'.join(project)
+    Project.append(Vcxproj.Project1)
+    return '\n'.join(Project)
 
   def CreateFilters(self):
-    project = []
-    project.append(Filters.Header)
-    project.append(Filters.Project0)
+    LocalFilters = []
+    LocalFilters.append(Filters.Header)
+    LocalFilters.append(Filters.Project0)
 
-    project.append(Filters.ItemGroup0)
+    LocalFilters.append(Filters.ItemGroup0)
     for MyFolder in self.Folders:
-      project.append(Filters.Folders(MyFolder))
-    project.append(Filters.ItemGroup1)
+      LocalFilters.append(Filters.Folders(MyFolder))
+    LocalFilters.append(Filters.ItemGroup1)
 
-    project.append(Filters.ItemGroup0)
+    LocalFilters.append(Filters.ItemGroup0)
     for MyFile in self.Nones:
-      project.append(Filters.Nones(MyFile))
-    project.append(Filters.ItemGroup1)
+      LocalFilters.append(Filters.Nones(MyFile))
+    LocalFilters.append(Filters.ItemGroup1)
 
-    project.append(Filters.ItemGroup0)
+    LocalFilters.append(Filters.ItemGroup0)
     for MyFile in self.Includes:
-      project.append(Filters.Includes(MyFile))
-    project.append(Filters.ItemGroup1)
+      LocalFilters.append(Filters.Includes(MyFile))
+    LocalFilters.append(Filters.ItemGroup1)
 
-    project.append(Filters.ItemGroup0)
+    LocalFilters.append(Filters.ItemGroup0)
     for MyFile in self.Sources:
-      project.append(Filters.Sources(MyFile))
-    project.append(Filters.ItemGroup1)
+      LocalFilters.append(Filters.Sources(MyFile))
+    LocalFilters.append(Filters.ItemGroup1)
 
-    project.append(Filters.Project1)
-    return '\n'.join(project)
+    LocalFilters.append(Filters.Project1)
+    return '\n'.join(LocalFilters)
 
   def GetHeaderFiles(self):
     return self.Includes
@@ -396,13 +395,13 @@ class Generator:
       os.remove(self.Name + '.vcxproj.filters')
 
     # Create new MSVC files
-    f = open(self.Name + '.vcxproj', 'w')
-    f.write(self.CreateProject())
-    f.close()
+    MyVcxproj = open(self.Name + '.vcxproj', 'w')
+    MyVcxproj.write(self.CreateProject())
+    MyVcxproj.close()
 
-    f = open(self.Name + '.vcxproj.filters', 'w')
-    f.write(self.CreateFilters())
-    f.close()
+    MyFilters = open(self.Name + '.vcxproj.filters', 'w')
+    MyFilters.write(self.CreateFilters())
+    MyFilters.close()
 
 #-------------------------------------------------------------------------------
 # --- GUI class
@@ -410,15 +409,18 @@ class Generator:
 class GUI:
   Configurations = []
   Platforms      = []
+  WorkingDir     = ''
 
   def __init__(self, TabControl, WorkingDir, AllVarList):
+    self.WorkingDir = WorkingDir
     OutputText = self.PrintCmdLineFrame(TabControl)
     self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList, OutputText)
 
   def GetAndCheckUserDir(self,WorkingDir, AllVarList):
     # help function for "select folder" button
     FolderSelected = filedialog.askdirectory()
-    WorkingDir.set(FolderSelected)
+    self.WorkingDir.set(FolderSelected)
+
     #check if given path exists and not empty
     AllVarList[4].set(    os.path.exists(WorkingDir.get())
                       and len(os.listdir(WorkingDir.get())))
@@ -437,27 +439,30 @@ class GUI:
 
     OutputText.insert(END, "\n---- Source Files ---- \n")
     for File in LocalSourceFiles:
-      OutputText.insert(END, str(File+"\n"))
+      OutputText.insert(END, str(File + "\n"))
 
     OutputText.insert(END, "\n--- Header Files --- \n")
     for File in LocalHeaderFiles:
-      OutputText.insert(END, str(File+"\n"))
+      OutputText.insert(END, str(File + "\n"))
 
     OutputText.insert(END, "\n---- None Files ---- \n")
     for File in LocalNoneFiles:
-      OutputText.insert(END, str(File+"\n"))
+      OutputText.insert(END, str(File + "\n"))
 
     OutputText.config(state=DISABLED)
 
+  def GenerateVcxproj(self, GenerateBtN, WorkingDir,
+                      AllVarList, ToolVer, OutputText):
 
-  def main_xx(self, GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText):
     name = os.path.split(os.getcwd())[-1]
     LocalGen = Generator(name,AllVarList, ToolVer)
 
     RootDir = WorkingDir.get()
     path_as_list = list(RootDir.split(","))
+
     for Dir in path_as_list:
-        LocalGen.Walk(Dir, RootDir)
+      LocalGen.Walk(Dir, RootDir)
+
     LocalGen.Generate()
 
     # print the result of vcxproj-generator
@@ -466,8 +471,7 @@ class GUI:
     # Activate generate button
     GenerateBtN.configure(stat=NORMAL)
 
-  def GenerateVcxprojFile(self, GenerateBtN, CombBox, WorkingDir, AllVarList,
-                          OutputText):
+  def GenerateCmd(self, GenerateBtN, CombBox, WorkingDir, AllVarList,OutputText):
     SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
     PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
     PathIsOk      =  AllVarList[4].get() != 0
@@ -483,7 +487,8 @@ class GUI:
           OutputText.insert(END, "vcxproj-genrator is running ...\n")
           OutputText.config(state=DISABLED)
           GenerateBtN.configure(stat=DISABLED)
-          self.main_xx(GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText)
+          self.GenerateVcxproj(GenerateBtN, WorkingDir,
+                               AllVarList, ToolVer, OutputText)
 
         else:
           tk.messagebox.showerror(title="Error",
@@ -494,7 +499,6 @@ class GUI:
     else:
       tk.messagebox.showerror(title="Error",
       message=" Vcxproj-Generator: Folder is not selected or empty!")
-
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList, OutputText):
     # Create frame for MSVC config widgets
@@ -530,8 +534,8 @@ class GUI:
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
                   command = lambda:
-                  self.GenerateVcxprojFile(GenerateBtN, CombBox, WorkingDir,
-                  AllVarList, OutputText),width=30)
+                  self.GenerateCmd(GenerateBtN, CombBox, WorkingDir,
+                                   AllVarList, OutputText),width=30)
     GenerateBtN.place(x=700, y=100, height=60)
     GenerateBtNTip = Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
@@ -575,11 +579,10 @@ class GUI:
                                 y=ProjectConfigYCordinate[Idx])
       #ProjectplatformBtnTip = Hovertip(ProjectplatformCheckBtn, ProjectConfigYCordinate[Idx])
 
-
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
     CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ",
-                                  relief=GROOVE, bd='3')
+                    relief=GROOVE, bd='3')
     CmdLineWindow.configure(font="times 11 bold")
     CmdLineWindow.place(x=20, y=250, height=340, width=950)
 
@@ -591,8 +594,8 @@ class GUI:
     ScrollBar_H.pack(side= BOTTOM, fill= "x")
 
     OutputText = tk.Text(CmdLineWindow, height= 440, width= 370,
-                         yscrollcommand = ScrollBar_V.set,
-                         xscrollcommand = ScrollBar_H.set, wrap= NONE)
+                 yscrollcommand = ScrollBar_V.set,
+                 xscrollcommand = ScrollBar_H.set, wrap= NONE)
     OutputText.pack(fill=BOTH, expand=0)
     OutputText.config(state=DISABLED)
 
