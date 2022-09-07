@@ -387,19 +387,24 @@ class Generator:
   def GetNoneFiles(self):
     return self.Nones
 
-  def Generate(self):
+  def Generate(self, WorkingDir):
+
+    VcxprojFullPathName = os.path.join(WorkingDir.get(), self.Name + '.vcxproj')
+    FiltersFullPathName = os.path.join(WorkingDir.get(), self.Name + '.vcxproj.filters')
+
     # Check if old MSVC files exists and delete them
-    if os.path.exists(self.Name + '.vcxproj'):
-      os.remove(self.Name + '.vcxproj')
-    if os.path.exists(self.Name + '.vcxproj.filters'):
-      os.remove(self.Name + '.vcxproj.filters')
+    if os.path.exists(VcxprojFullPathName):
+      os.remove(VcxprojFullPathName)
+
+    if os.path.exists(FiltersFullPathName):
+      os.remove(FiltersFullPathName)
 
     # Create new MSVC files
-    MyVcxproj = open(self.Name + '.vcxproj', 'w')
+    MyVcxproj = open(VcxprojFullPathName, 'w')
     MyVcxproj.write(self.CreateProject())
     MyVcxproj.close()
 
-    MyFilters = open(self.Name + '.vcxproj.filters', 'w')
+    MyFilters = open(FiltersFullPathName, 'w')
     MyFilters.write(self.CreateFilters())
     MyFilters.close()
 
@@ -409,17 +414,16 @@ class Generator:
 class GUI:
   Configurations = []
   Platforms      = []
-  WorkingDir     = ''
 
   def __init__(self, TabControl, WorkingDir, AllVarList):
-    self.WorkingDir = WorkingDir
+    #self.WorkingDir = WorkingDir
     OutputText = self.PrintCmdLineFrame(TabControl)
     self.PrintMsvcConfigFrame(TabControl, WorkingDir, AllVarList, OutputText)
 
-  def GetAndCheckUserDir(self,WorkingDir, AllVarList):
+  def GetAndCheckUserDir(self, WorkingDir, AllVarList):
     # help function for "select folder" button
     FolderSelected = filedialog.askdirectory()
-    self.WorkingDir.set(FolderSelected)
+    WorkingDir.set(FolderSelected)
 
     #check if given path exists and not empty
     AllVarList[4].set(    os.path.exists(WorkingDir.get())
@@ -454,8 +458,8 @@ class GUI:
   def GenerateVcxproj(self, GenerateBtN, WorkingDir,
                       AllVarList, ToolVer, OutputText):
 
-    name = os.path.split(os.getcwd())[-1]
-    LocalGen = Generator(name,AllVarList, ToolVer)
+    ProjectName = os.path.split(os.getcwd())[-1]
+    LocalGen = Generator(ProjectName,AllVarList, ToolVer)
 
     RootDir = WorkingDir.get()
     path_as_list = list(RootDir.split(","))
@@ -463,7 +467,7 @@ class GUI:
     for Dir in path_as_list:
       LocalGen.Walk(Dir, RootDir)
 
-    LocalGen.Generate()
+    LocalGen.Generate(WorkingDir)
 
     # print the result of vcxproj-generator
     self.PrintVcxprojGenOutput(LocalGen, OutputText)
