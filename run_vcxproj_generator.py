@@ -25,10 +25,10 @@ root.configure(bg="#5c8aFF") # Light DEE4E7
 # --- Window title
 root.title("Vcxproj-Generator version 1.0.1")
 
-# --- Deactivate the resize button (GUI window size)
+# --- Disable the resize button (GUI window size)
 root.resizable(0,0)
 
-# --- Gui icone
+# --- Gui icon
 IconDir = ".\\vcxproj_generator.ico"
 root.iconbitmap(IconDir)
 
@@ -36,11 +36,11 @@ root.iconbitmap(IconDir)
 TabControl = ttk.Notebook(root)
 TabControl.pack(expand=1, fill="both")
 
-# --- Create Tabs and disable it since we only have one ATM
+# --- Create a main tab
 MainTab = ttk.Frame(TabControl)
 TabControl.add(MainTab, text="")
 
-# ---- Global variable for User setup
+# ---- Global variable for default working directory
 WorkingDir    = StringVar()
 CurDirCount   = len(os.listdir(os.getcwd())) # check if curdir is empty
 WorkingDir.set(os.getcwd())
