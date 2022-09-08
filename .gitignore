@@ -1,7 +1,9 @@
-
-*.vcxproj
-*.vcxproj.filters
-*.user
-.vs/*
-__pycache__/*
+scripts/*.vcxproj
+scripts/*.vcxproj.filters
+scripts/*.user
+scripts/*.sln
+scripts/.vs/*
 scripts/__pycache__/
+scripts/x64/
+scripts/Release/
+scripts/Debug/

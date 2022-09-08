@@ -12,21 +12,16 @@
 #-------------------------------------------------------------------------------
 
 # import python packages
-import uuid
 
-import os, sys
-import re
+import os
+import uuid
 import tkinter
 import tkinter as tk
 
+from tkinter         import ttk
+from tkinter         import *
+from tkinter         import filedialog
 from idlelib.tooltip import Hovertip
-
-from PIL         import ImageTk
-from select      import select
-from tkinter     import ttk
-from tkinter     import *
-from tkinter     import filedialog
-from tkinter.ttk import *
 
 #-------------------------------------------------------------------------------
 # Global variables
