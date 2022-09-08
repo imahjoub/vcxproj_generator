@@ -14,22 +14,13 @@
 # import python packages
 import uuid
 
-import os, sys
-import re
-import threading
-import tkinter
-import tkinter as tk
-
-from dataclasses     import dataclass
 from idlelib.tooltip import Hovertip
 
 from PIL         import ImageTk
-from select      import select
 from tkinter     import ttk
 from tkinter     import *
 from tkinter     import filedialog
 from tkinter.ttk import *
-from fnmatch     import fnmatch
 
 #-------------------------------------------------------------------------------
 # Global variables
