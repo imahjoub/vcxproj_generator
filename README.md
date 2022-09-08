@@ -1,10 +1,10 @@
 vcxproj_generator
 =====================
 <p align="center">
-    <a href="https://github.com/imahjoub/vcxproj-generator-gui/blob/main/LICENSE">
+    <a href="https://github.com/imahjoub/vcxproj_generator/blob/main/LICENSE_1_0.txt">
         <img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="MIT License"></a>
-    <a href="https://github.com/imahjoub/vcxproj-generator-gui" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/y/imahjoub/vcxproj-generator-gui" /></a>
+    <a href="https://github.com/imahjoub/vcxproj_generator" alt="Activity">
+        <img src="https://img.shields.io/github/commit-activity/y/imahjoub/vcxproj_generator" /></a>
 </p>
 
 A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a given path and its subfolders to generate the `*.vcxproj` and `*.vcxproj.filters` files.
