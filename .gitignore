@@ -1,7 +1,6 @@
 
 *.vcxproj
 *.vcxproj.filters
-__pycache__/vcxproj_generator.cpython-310.pyc
 *.user
 .vs/*
-__pycache__/vcxproj_generator_gui.cpython-310.pyc
+__pycache__/*
