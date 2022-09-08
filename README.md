@@ -1,6 +1,10 @@
 vcxproj_generator
 =====================
 <p align="center">
+    <a href="https://sonarcloud.io/summary/new_code?id=imahjoub_vcxproj_generator">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=imahjoub_vcxproj_generator&metric=alert_status" alt="Quality Gate Status"></a>
+        <img src="https://custom-icon-badges.herokuapp.com/github/issues-raw/imahjoub/vcxproj_generator?logo=github" alt="Issues" /></a>
+    <a href="https://lgtm.com/projects/g/imahjoub/vcxproj_generator/context:cpp">
     <a href="https://github.com/imahjoub/vcxproj_generator/blob/main/LICENSE_1_0.txt">
         <img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="MIT License"></a>
     <a href="https://github.com/imahjoub/vcxproj_generator" alt="Activity">
