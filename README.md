@@ -4,6 +4,8 @@ vcxproj_generator
 <p align="center">
     <a href="https://sonarcloud.io/summary/new_code?id=imahjoub_vcxproj_generator">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=imahjoub_vcxproj_generator&metric=alert_status" alt="Quality Gate Status"></a>
+    <a href="https://app.codacy.com/gh/imahjoub/vcxproj_generator/dashboard">
+        <img src="https://app.codacy.com/project/badge/Grade/d3d5ebd231b34765bc7b663151a93574" alt="Codacy Badge" /></a>
     <a href="https://github.com/imahjoub/vcxproj_generator/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc">
         <img src="https://custom-icon-badges.herokuapp.com/github/issues-raw/imahjoub/vcxproj_generator?logo=github" alt="Issues" /></a>
     <a href="https://lgtm.com/projects/g/imahjoub/vcxproj_generator/context:cpp">
