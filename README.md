@@ -1,5 +1,8 @@
 vcxproj_generator
 =====================
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/75049003ff4a41e5b363427703f4695d)](https://app.codacy.com/gh/imahjoub/vcxproj_generator?utm_source=github.com&utm_medium=referral&utm_content=imahjoub/vcxproj_generator&utm_campaign=Badge_Grade_Settings)
+
 <p align="center">
     <a href="https://sonarcloud.io/summary/new_code?id=imahjoub_vcxproj_generator">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=imahjoub_vcxproj_generator&metric=alert_status" alt="Quality Gate Status"></a>
