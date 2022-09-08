@@ -458,7 +458,9 @@ class GUI:
   def GenerateVcxproj(self, GenerateBtN, WorkingDir,
                       AllVarList, ToolVer, OutputText):
 
-    ProjectName = os.path.split(os.getcwd())[-1]
+    # Set the project name
+    ProjectName = os.path.basename(WorkingDir.get())
+
     LocalGen = Generator(ProjectName,AllVarList, ToolVer)
 
     RootDir = WorkingDir.get()
@@ -499,10 +501,10 @@ class GUI:
           message=" Vcxproj-Generator: Project config are not selected!")
       else:
         tk.messagebox.showerror(title="Error",
-        message=" Vcxproj-Generator: MSVS is not selected!")
+        message=" Vcxproj-Generator: Visual Studio version is not selected!")
     else:
       tk.messagebox.showerror(title="Error",
-      message=" Vcxproj-Generator: Folder is not selected or empty!")
+      message=" Vcxproj-Generator: Project Folder is not selected or empty!")
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList, OutputText):
     # Create frame for MSVC config widgets
