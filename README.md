@@ -33,8 +33,8 @@ NONE_EXT   = ['.md', '.ld', '.gmk']
 ###### If you need more extensions, you can add them yourself in the script `vcxproj_generator.py.`
 
 ## Notes:
-If you want to regenerate new Visual Studio files, you should first close the Visual Studio IDE.
 
-The generated project may fail to build due to SDK versions (default 8.1), so I always recommand you to check the SDK version first
+- If you want to regenerate new Visual Studio files, you should first close the Visual Studio IDE.
+- The generated project may fail to build due to SDK versions (default 8.1), so I always recommand you to check the SDK version first
 
 
