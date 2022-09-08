@@ -38,7 +38,7 @@ NONE_EXT   = ['.md', '.ld', '.gmk']
 
 ## Notes:
 
-- If you want to regenerate new Visual Studio files, you should first close the Visual Studio IDE.
+- If you want to regenerate new vcxproj files, you should first close the Visual Studio IDE.
 - The generated project may fail to build due to SDK versions (default 8.1), so I always recommand you to check the SDK version first
 
 
