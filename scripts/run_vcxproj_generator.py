@@ -12,7 +12,7 @@
 #-------------------------------------------------------------------------------
 
 # import project files
-from .vcxproj_generator import *
+from vcxproj_generator import *
 
 #-------------------------------------------------------------------------------
 # Tkinter initialization

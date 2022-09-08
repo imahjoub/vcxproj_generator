@@ -14,9 +14,15 @@
 # import python packages
 import uuid
 
+import os, sys
+import re
+import tkinter
+import tkinter as tk
+
 from idlelib.tooltip import Hovertip
 
 from PIL         import ImageTk
+from select      import select
 from tkinter     import ttk
 from tkinter     import *
 from tkinter     import filedialog
