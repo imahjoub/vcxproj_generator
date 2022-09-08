@@ -8,9 +8,10 @@ vcxproj_generator
         <img src="https://app.codacy.com/project/badge/Grade/d3d5ebd231b34765bc7b663151a93574" alt="Codacy Badge" /></a>
     <a href="https://github.com/imahjoub/vcxproj_generator/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc">
         <img src="https://custom-icon-badges.herokuapp.com/github/issues-raw/imahjoub/vcxproj_generator?logo=github" alt="Issues" /></a>
-    <a href="https://lgtm.com/projects/g/imahjoub/vcxproj_generator/context:cpp">
+    <a href="https://github.com/imahjoub/vcxproj_generator" alt="GitHub code size in bytes">
+        <img src="https://img.shields.io/github/languages/code-size/imahjoub/vcxproj_generator" /></a>
     <a href="https://github.com/imahjoub/vcxproj_generator/blob/main/LICENSE_1_0.txt">
-        <img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="MIT License"></a>
+        <img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="Boost Software License 1.0"></a>
     <a href="https://github.com/imahjoub/vcxproj_generator" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/y/imahjoub/vcxproj_generator" /></a>
 </p>
