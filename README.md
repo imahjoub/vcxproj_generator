@@ -15,8 +15,8 @@ A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a gi
 
 ## How to use
 
-1. Run the exe file `vcxproj_generator.exe`.
-2. Select your project folder.
+1. Run the exe file `vcxproj_generator.exe`
+2. Select your project folder
 3. Set your visual studio configuration
 4. run the program
 
