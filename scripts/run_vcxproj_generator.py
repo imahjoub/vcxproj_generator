@@ -15,7 +15,7 @@
 from vcxproj_generator import *
 
 #-------------------------------------------------------------------------------
-# Tkinter initialization
+# --- Tkinter initialization
 #-------------------------------------------------------------------------------
 # --- Create the parent window (root)
 root = tkinter.Tk()
@@ -46,7 +46,7 @@ CurDirCount   = len(os.listdir(os.getcwd())) # check if curdir is empty
 WorkingDir.set(os.getcwd())
 
 #-------------------------------------------------------------------------------
-# Global variables
+# --- Global variables
 #-------------------------------------------------------------------------------
 RelaseVar       = IntVar(value=0)
 DebugVar        = IntVar(value=0)
