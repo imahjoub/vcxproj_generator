@@ -11,7 +11,9 @@
 #              or copy at http://www.boost.org/LICENSE_1_0.txt)
 #-------------------------------------------------------------------------------
 
-# import python packages
+#-------------------------------------------------------------------------------
+# import python packages/modules
+#-------------------------------------------------------------------------------
 
 import os
 import uuid
@@ -67,7 +69,7 @@ class Vcxproj:
           '      <Configuration>{0}</Configuration>',
           '      <Platform>{1}</Platform>',
           '    </ProjectConfiguration>'])
-  # project name, project uuid
+  # project name, project uid
   GlobalsT = '\n'.join([
           '  <PropertyGroup Label="Globals">',
           '    <ProjectGuid>{{{1}}}</ProjectGuid>',
@@ -141,9 +143,9 @@ class Vcxproj:
 
   @staticmethod
   def ItemDefenition(Configuration, Platform):
-    defenition = Vcxproj.ItemDefenitionReleaseT
-    if UseDebugLib(Configuration): defenition = Vcxproj.ItemDefenitionDebugT
-    return defenition.format(Configuration, Platform)
+    definition = Vcxproj.ItemDefenitionReleaseT
+    if UseDebugLib(Configuration): definition = Vcxproj.ItemDefenitionDebugT
+    return definition.format(Configuration, Platform)
 
   @staticmethod
   def Includes(Filename):
