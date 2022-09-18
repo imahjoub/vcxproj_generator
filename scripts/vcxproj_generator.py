@@ -45,7 +45,7 @@ def UseDebugLib(Configuration):
   return 'debug' in Configuration.lower()
 
 def GetParentPath(Path):
-  (FilePath, Filename) = os.path.split(Path)
+  (FilePath, _Filename) = os.path.split(Path)
   FilePath = FilePath.replace('/', '\\').replace('..\\', '').replace('.\\', '')
 
   if FilePath == '.':
@@ -282,13 +282,13 @@ class Generator:
     return LocalDir
 
   def AddFile(self, Dir, RootDir):
-    LocalDir    = self.RemoveRelativPath(Dir, RootDir)
-    (root, ext) = os.path.splitext(Dir)
-    if ext in HEADER_EXT:
+    LocalDir     = self.RemoveRelativPath(Dir, RootDir)
+    (_Root, Ext) = os.path.splitext(Dir)
+    if Ext in HEADER_EXT:
       self.AddHeader(str(LocalDir))
-    elif ext in SOURCE_EXT:
+    elif Ext in SOURCE_EXT:
       self.AddSource(str(LocalDir))
-    elif ext in NONE_EXT:
+    elif Ext in NONE_EXT:
       self.AddNone(str(LocalDir))
     else:
       return
@@ -510,14 +510,14 @@ class GUI:
     WdEntryBox = Entry(MsvcConfigFrame, textvariable=WorkingDir)
     WdEntryBox.place(x=20, y=20, height=35, width=750)
     WdEntryBox.configure(font="times 11")
-    WdEntryBoxTip = Hovertip(WdEntryBox,'Working directory')
+    Hovertip(WdEntryBox,'Working directory')
 
     # Create the working dir browsing button
     WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
                     command = lambda: self.GetAndCheckUserDir(WorkingDir,
                                       AllVarList), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
-    WdBrowsingBtNTip = Hovertip(WdBrowsingBtN,'Select your working directory')
+    Hovertip(WdBrowsingBtN,'Select your working directory')
 
     # Create a combobox for MSVC version
     MsvcVersion = Label(MsvcConfigFrame ,text="Visual Studio Version")
@@ -528,7 +528,7 @@ class GUI:
     CombBox = ttk.Combobox(MsvcConfigFrame, state="readonly", font=text_font)
     CombBox['values'] =('vs2017', 'vs2019', 'vs2022')
     CombBox.place(x=20, y=120, height=35, width=200)
-    CombBoxTip = Hovertip(CombBox,'Select your visual studio version')
+    Hovertip(CombBox,'Select your visual studio version')
 
     # Create "Generate vcxproj files" button
     GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
@@ -536,7 +536,7 @@ class GUI:
                   self.GenerateCmd(GenerateBtN, CombBox, WorkingDir,
                                    AllVarList, OutputText),width=30)
     GenerateBtN.place(x=700, y=100, height=60)
-    GenerateBtNTip = Hovertip(GenerateBtN,'Press to generate vcxproj files')
+    Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
     # Create a frame for Solution configurations and platform
     ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
@@ -565,18 +565,16 @@ class GUI:
 
 
       # Create project config checkbuttons
-      ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                              variable= AllVarList[Idx],
-                              onvalue=1, offvalue=0).place(x=20,
-                              y=ProjectConfigYCordinate[Idx])
-      #ProjectConfigBtnTip   = Hovertip(ProjectConfigCheckBtn, ProjectConfigYCordinate[Idx])
+      _ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
+                               variable= AllVarList[Idx],
+                               onvalue=1, offvalue=0).place(x=20,
+                               y=ProjectConfigYCordinate[Idx])
 
 
-      ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                                variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
-                                onvalue=1, offvalue=0).place(x=120,
-                                y=ProjectConfigYCordinate[Idx])
-      #ProjectplatformBtnTip = Hovertip(ProjectplatformCheckBtn, ProjectConfigYCordinate[Idx])
+      _ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
+                                 variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
+                                 onvalue=1, offvalue=0).place(x=120,
+                                 y=ProjectConfigYCordinate[Idx])
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
