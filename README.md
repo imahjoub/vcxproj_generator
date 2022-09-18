@@ -23,11 +23,9 @@ A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a gi
 1. Run the exe file `vcxproj_generator.exe` <sub>***(Temporary workaround, Do copy the `vcxproj_generator.ico` to the same location of the exe)***</sub>
 2. Select your project folder
 3. Set your visual studio configuration
-4. run the program
-
+4. Run the program
 
 ![image](https://user-images.githubusercontent.com/48915588/189079254-e0e2caa6-58f7-4eae-a588-7f102c11f991.png)
-
 
 After you run the program, the vcxproj files will be generated and all found files in the specified folder will be listed in the output window
 
@@ -45,5 +43,3 @@ NONE_EXT   = ['.md', '.ld', '.gmk']
 
 - If you want to regenerate new vcxproj files, you should first close the Visual Studio IDE.
 - The generated project may fail to build due to SDK versions (default 8.1), so I always recommand you to check the SDK version first
-
-
