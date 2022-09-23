@@ -565,16 +565,16 @@ class GUI:
 
 
       # Create project config checkbuttons
-      _ProjectConfigCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                               variable= AllVarList[Idx],
-                               onvalue=1, offvalue=0).place(x=20,
-                               y=ProjectConfigYCordinate[Idx])
+      ttk.Checkbutton(ProjectConfigFrame,
+                      variable= AllVarList[Idx],
+                      onvalue=1, offvalue=0).place(x=20,
+                      y=ProjectConfigYCordinate[Idx])
 
 
-      _ProjectplatformCheckBtn = ttk.Checkbutton(ProjectConfigFrame,
-                                 variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
-                                 onvalue=1, offvalue=0).place(x=120,
-                                 y=ProjectConfigYCordinate[Idx])
+      ttk.Checkbutton(ProjectConfigFrame,
+                      variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
+                      onvalue=1, offvalue=0).place(x=120,
+                      y=ProjectConfigYCordinate[Idx])
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
