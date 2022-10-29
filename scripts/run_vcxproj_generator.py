@@ -12,6 +12,7 @@
 #-------------------------------------------------------------------------------
 
 # import project files
+from iconbitmap        import *
 from vcxproj_generator import *
 
 #-------------------------------------------------------------------------------
@@ -28,9 +29,14 @@ root.title("Vcxproj-Generator version 1.0.1")
 # --- Disable the resize button (GUI window size)
 root.resizable(0,0)
 
-# --- Gui icon
-IconDir = ".\\vcxproj_generator.ico"
-root.iconbitmap(IconDir)
+# --- GUI iconbitmap
+IconData= base64.b64decode(IconInBase64Format)
+TmpFile= "IconInBase64Format.ico"
+IconFile= open(TmpFile,"wb")
+IconFile.write(IconData)
+IconFile.close()
+root.wm_iconbitmap(TmpFile)
+os.remove(TmpFile)
 
 # --- Create a tab control
 TabControl = ttk.Notebook(root)
