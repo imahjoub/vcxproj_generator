@@ -30,9 +30,9 @@ root.title("Vcxproj-Generator version 1.0.1")
 root.resizable(0,0)
 
 # --- GUI iconbitmap
-IconData= base64.b64decode(IconInBase64Format)
-TmpFile= "IconInBase64Format.ico"
-IconFile= open(TmpFile,"wb")
+IconData = base64.b64decode(IconInBase64Format)
+TmpFile  = "IconInBase64Format.ico"
+IconFile = open(TmpFile,"wb")
 IconFile.write(IconData)
 IconFile.close()
 root.wm_iconbitmap(TmpFile)
