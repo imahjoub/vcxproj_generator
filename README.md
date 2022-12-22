@@ -7,7 +7,7 @@ vcxproj_generator
     <a href="https://app.codacy.com/gh/imahjoub/vcxproj_generator/dashboard">
         <img src="https://app.codacy.com/project/badge/Grade/d3d5ebd231b34765bc7b663151a93574" alt="Codacy Badge" /></a>
     <a href="https://github.com/imahjoub/vcxproj_generator/actions?query=workflow%3ACodeQL">
-        <img src="https://github.com/imahjoub/vcxproj_generator/actions/workflows/CodeQL.yml/badge.svg" alt="CodeQL"></a>
+        <img src="https://github.com/imahjoub/vcxproj_generator/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
     <a href="https://github.com/imahjoub/vcxproj_generator/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc">
         <img src="https://custom-icon-badges.herokuapp.com/github/issues-raw/imahjoub/vcxproj_generator?logo=github" alt="Issues" /></a>
     <a href="https://github.com/imahjoub/vcxproj_generator" alt="GitHub code size in bytes">
