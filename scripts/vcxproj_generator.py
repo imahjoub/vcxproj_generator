@@ -18,6 +18,7 @@ import os
 import uuid
 import tkinter
 import tkinter as tk
+import base64
 
 from tkinter         import ttk
 from tkinter         import *
@@ -29,7 +30,8 @@ from idlelib.tooltip import Hovertip
 #-------------------------------------------------------------------------------
 HEADER_EXT = ['.h',  '.in', '.hpp']
 SOURCE_EXT = ['.c',  '.cc', '.cpp']
-NONE_EXT   = ['.md', '.ld', '.gmk', 'yml']
+NONE_EXT   = ['.md', '.ld', '.gmk', '.yml', '.pem',
+              '.in', '.info', '.txt', '.pl', '.py']
 
 #-------------------------------------------------------------------------------
 # Global functions
