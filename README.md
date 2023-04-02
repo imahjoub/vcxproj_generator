@@ -29,7 +29,7 @@ A Tool that iteratively searches for files (`*.h`, `*.cpp`, `*.c`, etc.) in a gi
 
 ![image](https://user-images.githubusercontent.com/48915588/189079254-e0e2caa6-58f7-4eae-a588-7f102c11f991.png)
 
-After you run the program, the vcxproj files will be generated and all found files in the specified folder will be listed in the output window
+After you run the program, the vcxproj files will be generated and additionally all files found in the specified folder will be listed in the output window
 
 ## Supported file extensions
 
