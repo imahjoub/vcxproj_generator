@@ -23,6 +23,7 @@ import base64
 from tkinter         import ttk
 from tkinter         import *
 from tkinter         import filedialog
+from tkinter import Label, Frame, Entry, NONE, GROOVE
 from idlelib.tooltip import Hovertip
 
 #-------------------------------------------------------------------------------
