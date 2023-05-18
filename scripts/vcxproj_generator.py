@@ -123,8 +123,8 @@ class Vcxproj:
   # None files path
   NonesT   = '    <None Include="{0}" />'
 
-  ImportTargets = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />'
-  ImportProps   = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />'
+  ImportTargets      = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />'
+  ImportProps        = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />'
   ImportDefaultProps = '  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />'
 
   @staticmethod
@@ -232,39 +232,30 @@ class Generator:
     self.Configurations.clear()
     self.Platforms.clear()
 
-    if (AllVarList[0].get() != 0 and AllVarList[1].get() == 0):
-      self.Configurations = ['Release']
-    if (AllVarList[0].get() == 0 and AllVarList[1].get() != 0):
-      self.Configurations = ['Debug']
-    if (AllVarList[0].get() != 0 and AllVarList[1].get() != 0):
-      self.Configurations = ['Release', 'Debug']
-    if (AllVarList[2].get() != 0 and AllVarList[3].get() == 0):
-      self.Platforms = ['Win32']
-    if (AllVarList[2].get() == 0 and AllVarList[3].get() != 0):
-      self.Platforms = ['x64']
-    if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0):
-      self.Platforms = ['x64', 'Win32']
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() == 0): self.Configurations = ['Release']
+    if (AllVarList[0].get() == 0 and AllVarList[1].get() != 0): self.Configurations = ['Debug']
+    if (AllVarList[0].get() != 0 and AllVarList[1].get() != 0): self.Configurations = ['Release', 'Debug']
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() == 0): self.Platforms      = ['Win32']
+    if (AllVarList[2].get() == 0 and AllVarList[3].get() != 0): self.Platforms      = ['x64']
+    if (AllVarList[2].get() != 0 and AllVarList[3].get() != 0): self.Platforms      = ['x64', 'Win32']
 
   def GetToolSetVer(self, ToolVer):
-    if ToolVer == 0:
-      LocalToolVer = 'v141'
-    if ToolVer == 1:
-      LocalToolVer = 'v142'
-    if ToolVer == 2:
-      LocalToolVer = 'v143'
+    if ToolVer == 0: LocalToolVer = 'v141'
+    if ToolVer == 1: LocalToolVer = 'v142'
+    if ToolVer == 2: LocalToolVer = 'v143'
     return LocalToolVer
 
   def AddFolder(self, path):
     LocalFilter = GetParentPath(path)
-    if LocalFilter == '':
-      return
+    if LocalFilter == '': return
     if LocalFilter not in self.Folders:
+
       self.Folders.add(LocalFilter)
       MyFilters = ''
+
       for Iter in os.path.split(LocalFilter):
         MyFilters = os.path.join(MyFilters, Iter)
-        if MyFilters != '':
-          self.Folders.add(MyFilters)
+        if MyFilters != '': self.Folders.add(MyFilters)
 
   def AddSource(self, Filename):
     LocalDir = "".join(( ".\\", Filename))
@@ -286,19 +277,15 @@ class Generator:
   def AddFile(self, Dir, RootDir):
     LocalDir     = self.RemoveRelativPath(Dir, RootDir)
     (_Root, Ext) = os.path.splitext(Dir)
-    if Ext in HEADER_EXT:
-      self.AddHeader(str(LocalDir))
-    elif Ext in SOURCE_EXT:
-      self.AddSource(str(LocalDir))
-    elif Ext in NONE_EXT:
-      self.AddNone(str(LocalDir))
-    else:
-      return
+
+    if   Ext in HEADER_EXT : self.AddHeader(str(LocalDir))
+    elif Ext in SOURCE_EXT : self.AddSource(str(LocalDir))
+    elif Ext in NONE_EXT   : self.AddNone(str(LocalDir))
+    else                   : return
     self.AddFolder(str(LocalDir))
 
   def Walk(self,Dir, RootDir):
-    if os.path.isfile(Dir):
-      self.AddFile(Dir, RootDir)
+    if os.path.isfile(Dir): self.AddFile(Dir, RootDir)
     else:
       for subPath in os.listdir(Dir):
         self.Walk(os.path.join(Dir, subPath), RootDir)
@@ -421,8 +408,7 @@ class GUI:
     WorkingDir.set(FolderSelected)
 
     #check if given path exists and not empty
-    AllVarList[4].set(    os.path.exists(WorkingDir.get())
-                      and len(os.listdir(WorkingDir.get())))
+    AllVarList[4].set( os.path.exists(WorkingDir.get()) and len(os.listdir(WorkingDir.get())))
 
     if AllVarList[4].get() == 0:
       # show error message box
@@ -450,8 +436,7 @@ class GUI:
 
     OutputText.config(state=DISABLED)
 
-  def GenerateVcxproj(self, GenerateBtN, WorkingDir,
-                      AllVarList, ToolVer, OutputText):
+  def GenerateVcxproj(self, GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText):
 
     # Set the project name
     ProjectName = os.path.basename(WorkingDir.get())
@@ -473,9 +458,9 @@ class GUI:
     GenerateBtN.configure(stat=NORMAL)
 
   def GenerateCmd(self, GenerateBtN, CombBox, WorkingDir, AllVarList,OutputText):
-    SlnConfigIsOk = (AllVarList[0].get() != 0 or  AllVarList[1].get() != 0)
-    PlatformIsOk  = (AllVarList[2].get() != 0 or  AllVarList[3].get() != 0)
-    PathIsOk      =  AllVarList[4].get() != 0
+    SlnConfigIsOk = (AllVarList[0].get() !=  0 or  AllVarList[1].get() != 0)
+    PlatformIsOk  = (AllVarList[2].get() !=  0 or  AllVarList[3].get() != 0)
+    PathIsOk      =  AllVarList[4].get() !=  0
     MSVSVerIsOk   =  CombBox.current()   != -1
 
     if PathIsOk == True:
@@ -488,8 +473,7 @@ class GUI:
           OutputText.insert(END, "vcxproj-genrator is running ...\n")
           OutputText.config(state=DISABLED)
           GenerateBtN.configure(stat=DISABLED)
-          self.GenerateVcxproj(GenerateBtN, WorkingDir,
-                               AllVarList, ToolVer, OutputText)
+          self.GenerateVcxproj(GenerateBtN, WorkingDir, AllVarList, ToolVer, OutputText)
 
         else:
           tk.messagebox.showerror(title="Error",
@@ -503,8 +487,7 @@ class GUI:
 
   def PrintMsvcConfigFrame(self, TabControl, WorkingDir, AllVarList, OutputText):
     # Create frame for MSVC config widgets
-    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ',
-                      relief=GROOVE, bd='3')
+    MsvcConfigFrame = tk.LabelFrame(TabControl, text=' Visual Studio Config ', relief=GROOVE, bd='3')
     MsvcConfigFrame.configure(font="times 11 bold")
     MsvcConfigFrame.place(x=20, y=20, height=220, width=950)
 
@@ -515,9 +498,7 @@ class GUI:
     Hovertip(WdEntryBox,'Working directory')
 
     # Create the working dir browsing button
-    WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder",
-                    command = lambda: self.GetAndCheckUserDir(WorkingDir,
-                                      AllVarList), width=20)
+    WdBrowsingBtN = ttk.Button(MsvcConfigFrame, text="Select folder", command = lambda: self.GetAndCheckUserDir(WorkingDir,AllVarList), width=20)
     WdBrowsingBtN.place(x=790, y=20, height=35)
     Hovertip(WdBrowsingBtN,'Select your working directory')
 
@@ -533,17 +514,12 @@ class GUI:
     Hovertip(CombBox,'Select your visual studio version')
 
     # Create "Generate vcxproj files" button
-    GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files",
-                  command = lambda:
-                  self.GenerateCmd(GenerateBtN, CombBox, WorkingDir,
-                                   AllVarList, OutputText),width=30)
+    GenerateBtN = ttk.Button(MsvcConfigFrame, text="Generate Vcxproj Files", command = lambda: self.GenerateCmd(GenerateBtN, CombBox, WorkingDir, AllVarList, OutputText),width=30)
     GenerateBtN.place(x=700, y=100, height=60)
     Hovertip(GenerateBtN,'Press to generate vcxproj files')
 
     # Create a frame for Solution configurations and platform
-    ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,
-                         text=" Solution configurations and platforms ",
-                         relief=GROOVE, bd='2')
+    ProjectConfigFrame = tk.LabelFrame(MsvcConfigFrame,text=" Solution configurations and platforms ", relief=GROOVE, bd='2')
     ProjectConfigFrame.configure(font="times 11 bold")
     ProjectConfigFrame.place(x=250, y=80, height=100, width=400)
 
@@ -555,33 +531,22 @@ class GUI:
 
     for Idx in range(2):
       # Create project config labels
-      ProjectConfigLabel = Label(ProjectConfigFrame,
-                                 text=ProjectConfigList[Idx])
+      ProjectConfigLabel = Label(ProjectConfigFrame, text=ProjectConfigList[Idx])
       ProjectConfigLabel.place(x=40, y=ProjectConfigYCordinate[Idx])
       ProjectConfigLabel.configure(font="times 10")
 
-      ProjectplatformLabel = Label(ProjectConfigFrame,
-                                   text=ProjectPlatformList[Idx])
+      ProjectplatformLabel = Label(ProjectConfigFrame, text=ProjectPlatformList[Idx])
       ProjectplatformLabel.place(x=140, y=ProjectConfigYCordinate[Idx])
       ProjectplatformLabel.configure(font="times 10")
 
 
       # Create project config checkbuttons
-      ttk.Checkbutton(ProjectConfigFrame,
-                      variable= AllVarList[Idx],
-                      onvalue=1, offvalue=0).place(x=20,
-                      y=ProjectConfigYCordinate[Idx])
-
-
-      ttk.Checkbutton(ProjectConfigFrame,
-                      variable= AllVarList[Idx + 2],  # TBD change this hard coded iteration
-                      onvalue=1, offvalue=0).place(x=120,
-                      y=ProjectConfigYCordinate[Idx])
+      ttk.Checkbutton(ProjectConfigFrame, variable= AllVarList[Idx + 0], onvalue=1, offvalue=0).place(x=20, y=ProjectConfigYCordinate[Idx])
+      ttk.Checkbutton(ProjectConfigFrame, variable= AllVarList[Idx + 2], onvalue=1, offvalue=0).place(x=120, y=ProjectConfigYCordinate[Idx])
 
   def PrintCmdLineFrame(self, TabControl):
     # Create cmd line output window
-    CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ",
-                    relief=GROOVE, bd='3')
+    CmdLineWindow = tk.LabelFrame(TabControl, text=" Output ", relief=GROOVE, bd='3')
     CmdLineWindow.configure(font="times 11 bold")
     CmdLineWindow.place(x=20, y=250, height=340, width=950)
 
@@ -592,9 +557,7 @@ class GUI:
     ScrollBar_H = tk.Scrollbar(CmdLineWindow, orient= HORIZONTAL)
     ScrollBar_H.pack(side= BOTTOM, fill= "x")
 
-    OutputText = tk.Text(CmdLineWindow, height= 440, width= 370,
-                 yscrollcommand = ScrollBar_V.set,
-                 xscrollcommand = ScrollBar_H.set, wrap= NONE)
+    OutputText = tk.Text(CmdLineWindow, height= 440, width= 370,  yscrollcommand = ScrollBar_V.set, xscrollcommand = ScrollBar_H.set, wrap= NONE)
     OutputText.pack(fill=BOTH, expand=0)
     OutputText.config(state=DISABLED)
 
